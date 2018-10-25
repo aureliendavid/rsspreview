@@ -2,14 +2,19 @@
 
   "manifest_version": 2,
   "name": "RSSPreview",
-  "version": "1.0",
+  "version": "1.1",
   "author": "Aurelien David",
   "homepage_url": "https://github.com/aureliendavid/rsspreview",
 
   "description": "Preview RSS feeds in browser",
 
+
   "icons": {
-    "48": "icons/rss-48.png"
+    "32": "icons/rss-32.png",
+    "48": "icons/rss-48.png",
+    "64": "icons/rss-64.png",
+    "128": "icons/rss-128.png",
+    "256": "icons/rss-256.png"
   },
 
   "background": {
