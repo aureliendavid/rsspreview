@@ -1,0 +1,116 @@
+
+
+html {
+  font: 3mm tahoma,arial,helvetica,sans-serif;
+  background-color: rgb(240, 240, 240);
+}
+
+body {
+  margin: 0;
+  padding: 0 3em;
+  font: message-box;
+}
+
+h1 {
+  font-size: 160%;
+  border-bottom: 2px solid ThreeDLightShadow;
+  margin: 0 0 .2em 0;
+}
+
+h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1 a:hover {
+  text-decoration: underline;
+}
+
+h2 {
+  color: GrayText;
+  font-size: 110%;
+  font-weight: normal;
+  margin: 0 0 .6em 0;
+}
+
+a[href] img {
+  border: none;
+}
+
+#feedBody {
+  border: 1px solid THreeDShadow;
+  padding: 3em;
+  padding-inline-start: 30px;
+  margin: 2em auto;
+  background-color: white;
+}
+
+#feedTitleLink {
+  float: right;
+  margin-inline-start: .6em;
+  margin-inline-end: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+
+#feedTitleContainer {
+  margin-inline-start: 0;
+  margin-inline-end: .6em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#feedTitleImage {
+  margin-inline-start: .6em;
+  margin-inline-end: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 300px;
+  max-height: 150px;
+}
+
+.feedEntryContent {
+  font-size: 110%;
+}
+
+.link {
+  color: #0000FF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link:hover:active {
+  color: #FF0000;
+}
+
+.lastUpdated {
+  font-size: 85%;
+  font-weight: normal;
+}
+
+.type-icon {
+  vertical-align: bottom;
+  height: 16px;
+  width: 16px;
+}
+
+.enclosures {
+  border: 1px solid THreeDShadow;
+  padding: 1em;
+  margin: 1em auto;
+  background-color: rgb(240, 240, 240);
+}
+
+.enclosure {
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+.enclosureIcon {
+  vertical-align: bottom;
+  height: 16px;
+  width: 16px;
+  margin-right: 3px;
+}
