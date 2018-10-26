@@ -16,6 +16,8 @@ function detectFeed(event) {
 
 }
 
+const browser = window.browser || window.chrome;
+
 browser.webRequest.onHeadersReceived.addListener(
     detectFeed,
     { urls: ["<all_urls>"], types: ["main_frame"] },

@@ -10,13 +10,21 @@
   }
   window.hasRun = true;
 
-  const rootName = document.getRootNode().documentElement.nodeName.toLowerCase();
+
+  var rootNode = document.getRootNode().documentElement;
+
+  // for chrome
+  var d = document.getElementById("webkit-xml-viewer-source-xml");
+  if (d && d.firstChild)
+    rootNode = d.firstChild;
+
+  const rootName = rootNode.nodeName.toLowerCase();
 
 
   var isRSS1 = false;
   if (rootName == "rdf" || rootName == "rdf:rdf") {
-    if (document.getRootNode().documentElement.attributes['xmlns']) {
-      isRSS1 = (document.getRootNode().documentElement.attributes['xmlns'].nodeValue.search('rss') > 0)
+    if (rootNode.attributes['xmlns']) {
+      isRSS1 = (rootNode.attributes['xmlns'].nodeValue.search('rss') > 0)
     }
   }
 

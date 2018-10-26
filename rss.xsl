@@ -4,7 +4,7 @@
     xmlns:atom="http://www.w3.org/2005/Atom"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rss1="http://purl.org/rss/1.0/"
-    exclude-result-prefixes="atom rdf" >
+    exclude-result-prefixes="atom rdf rss1" >
 
     <xsl:output method="html" indent="yes" encoding="utf-8" />
 
@@ -54,7 +54,7 @@
                 <div class="lastUpdated"><xsl:value-of select="pubDate | atom:updated | rss1:pubDate" /></div>
             </h3>
             <div class="feedEntryContent">
-                <xsl:value-of select="description | atom:summary | rss1:description" disable-output-escaping="yes" />
+                <xsl:value-of select="description | atom:summary | rss1:description"  />
             </div>
             <div class="enclosures">
                 <xsl:for-each select="enclosure | atom:link[@rel='enclosure'] | rss1:enclosure">

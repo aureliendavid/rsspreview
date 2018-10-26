@@ -89,7 +89,6 @@ function formatfilenames() {
 function formatfilesizes() {
 
 	function humanfilesize(size) {
-		console.log(size);
 		var i = 0;
 		if (size && size != "" && size > 0)
 			i = Math.floor( Math.log(size) / Math.log(1024) );
