@@ -106,6 +106,13 @@ function formatfilesizes() {
 	}
 }
 
+
+function addfeedurl(url) {
+
+	var h1 = document.getElementById("feedTitleText");
+	h1.innerHTML += ' :: <a href="'+url+'"><img src="icons/rss-32.png" class="headerIcon" />Feed URL</a>';
+}
+
 function main() {
 
 	var query_string = location.search.substring(1).split("&");
@@ -122,6 +129,7 @@ function main() {
 			formatdescriptions();
 			formatfilenames();
 			formatfilesizes();
+			addfeedurl(feed_url);
 
 			document.title = "RSSPreview: " + document.getElementById("feedTitleText").innerText;
 

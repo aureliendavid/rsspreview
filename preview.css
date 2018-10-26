@@ -114,3 +114,10 @@ a[href] img {
   width: 16px;
   margin-right: 3px;
 }
+
+.headerIcon {
+  vertical-align: bottom;
+  height: 25px;
+  width: 25px;
+  margin-right: 2px;
+}

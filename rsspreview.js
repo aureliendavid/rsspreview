@@ -10,10 +10,20 @@
   }
   window.hasRun = true;
 
-  const rootName = document.getRootNode().documentElement.nodeName;
+  const rootName = document.getRootNode().documentElement.nodeName.toLowerCase();
 
 
-  if (rootName == "rss" || rootName == "channel" || rootName == "feed") {
+  var isRSS1 = false;
+  if (rootName == "rdf" || rootName == "rdf:rdf") {
+    if (document.getRootNode().documentElement.attributes['xmlns']) {
+      isRSS1 = (document.getRootNode().documentElement.attributes['xmlns'].nodeValue.search('rss') > 0)
+    }
+  }
+
+
+  if ( rootName == "rss" || rootName == "channel"  // rss2
+    || rootName == "feed"  // atom
+    || isRSS1 ) {
 
     var feed_url = window.location.href;
 
