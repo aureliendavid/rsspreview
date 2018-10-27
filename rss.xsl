@@ -19,7 +19,7 @@
         <div id="feedTitleContainer">
           <h1 id="feedTitleText" >
             <a href="{link | atom:link[@rel='alternate']/@href | rss1:link}" target="_blank">
-            <img src="icons/home.png" class="headerIcon" />
+            <!--img data-src="icons/home.png" class="extImg headerIcon" /-->
             <xsl:value-of select="title | atom:title | rss1:title" />
             </a>
           </h1>
@@ -60,7 +60,7 @@
                 <xsl:for-each select="enclosure | atom:link[@rel='enclosure'] | rss1:enclosure">
 
                   <div class="enclosure">
-                      <img src="icons/file.png" class="enclosureIcon" />
+                      <img data-src="icons/file.png" class="extImg enclosureIcon" />
                       <a href="{@url | @href}" target="_blank" class="enclosureFilename"><xsl:value-of select="@url | @href" /></a>
                       (<xsl:value-of select="@type" />, <span class="enclosureSize"><xsl:value-of select="@length" /></span>)
                   </div>
