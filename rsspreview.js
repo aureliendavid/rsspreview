@@ -47,15 +47,35 @@
 
   function formatdescriptions() {
 
-    // unescapes descriptions to html
+    // unescapes descriptions to html then to xml
 
-    var tohtml = document.getElementsByClassName("feedEntryContent");
+    var xml_parser = new XMLSerializer();
+    var html_parser = new DOMParser();
+
+    var tohtml = document.getElementsByClassName("feedRawContent");
     for (var i = 0; i<tohtml.length; i++) {
-      tohtml[i].innerHTML = tohtml[i].innerText;
+
+      var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
+      var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+
+      tohtml[i].insertAdjacentHTML('afterend', xml_desc);
+
     }
 
-    var feed_desc = document.getElementById("feedSubtitleText");
-    feed_desc.innerHTML = feed_desc.innerText;
+    document.querySelectorAll('.feedRawContent').forEach(function(a){
+      a.remove()
+    })
+
+
+    var feed_desc = document.getElementById("feedSubtitleRaw");
+
+    var html_desc = html_parser.parseFromString('<h2 id="feedSubtitleText">'+feed_desc.innerText+'</h2>', "text/html");
+    var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+
+    feed_desc.insertAdjacentHTML('afterend', xml_desc);
+
+    feed_desc.parentNode.removeChild(feed_desc);
+
 
   }
 
@@ -114,6 +134,7 @@
     var h1 = document.getElementById("feedTitleText");
     h1.innerHTML += ' :: <a href="'+url+'"><img src="'+chrome.extension.getURL("icons/rss-32.png")+'" class="headerIcon" />Feed URL</a>';
   }
+
 
   function detect() {
 
@@ -195,7 +216,7 @@
         console.log(document);
 
         removeemptyenclosures();
-        //formatdescriptions();
+        formatdescriptions();
         formatfilenames();
         formatfilesizes();
         extensionimages();

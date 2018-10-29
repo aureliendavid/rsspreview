@@ -23,7 +23,7 @@
             <xsl:value-of select="title | atom:title | rss1:title" />
             </a>
           </h1>
-          <h2 id="feedSubtitleText" ><xsl:value-of select="description | atom:subtitle | rss1:description" /></h2>
+          <h2 id="feedSubtitleRaw" ><xsl:value-of select="description | atom:subtitle | rss1:description" /></h2>
           <!--div class="lastUpdated">Last updated: <xsl:value-of select="lastBuildDate | atom:updated" /></div-->
         </div>
       </div>
@@ -53,7 +53,7 @@
 
                 <div class="lastUpdated"><xsl:value-of select="pubDate | atom:updated | rss1:pubDate" /></div>
             </h3>
-            <div class="feedEntryContent">
+            <div class="feedRawContent">
                 <xsl:value-of select="description | atom:summary | rss1:description"  />
             </div>
             <div class="enclosures">
