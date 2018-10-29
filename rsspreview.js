@@ -136,6 +136,34 @@
   }
 
 
+  function extensionimages() {
+
+    var extimgs = document.getElementsByClassName("extImg");
+    for (var i = 0; i<extimgs.length; i++) {
+      extimgs[i].src = chrome.extension.getURL(extimgs[i].attributes['data-src'].nodeValue);
+    }
+
+  }
+
+  function makepreviewhtml() {
+
+    var doc = document.implementation.createHTMLDocument("");
+
+    var feedBody = doc.createElement("div");
+    feedBody.id = "feedBody";
+    doc.body.appendChild(feedBody);
+
+    var css = doc.createElement('link');
+    css.setAttribute('rel', 'stylesheet');
+    css.setAttribute('href', chrome.extension.getURL("preview.css"));
+    doc.head.appendChild(css);
+
+    return doc;
+
+
+  }
+
+
   function detect() {
 
     var rootNode = document.getRootNode().documentElement;
@@ -170,33 +198,6 @@
   }
 
 
-  function extensionimages() {
-
-    var extimgs = document.getElementsByClassName("extImg");
-    for (var i = 0; i<extimgs.length; i++) {
-      extimgs[i].src = chrome.extension.getURL(extimgs[i].attributes['data-src'].nodeValue);
-    }
-
-  }
-
-  function makepreviewhtml() {
-
-    var doc = document.implementation.createHTMLDocument("");
-
-    var feedBody = doc.createElement("div");
-    feedBody.id = "feedBody";
-    doc.body.appendChild(feedBody);
-
-    var css = doc.createElement('link');
-    css.setAttribute('rel', 'stylesheet');
-    css.setAttribute('href', chrome.extension.getURL("preview.css"));
-    doc.head.appendChild(css);
-
-    return doc;
-
-
-  }
-
   function main(feedNode) {
 
       var feed_url = window.location.href;
@@ -209,11 +210,6 @@
 
         // replace the content with the preview document
         document.replaceChild(document.importNode(preview.documentElement, true), document.documentElement);
-        window.document = preview;
-
-        console.log(preview);
-        console.log(window.document);
-        console.log(document);
 
         removeemptyenclosures();
         formatdescriptions();
