@@ -41,8 +41,8 @@
 
             <h3>
                 <xsl:choose>
-                  <xsl:when test="link | atom:link[@rel='alternate']/@href | rss1:link">
-                    <a href="{link | atom:link[@rel='alternate']/@href | rss1:link}" target="_blank">
+                  <xsl:when test="link | atom:link/@href | rss1:link">
+                    <a href="{link | atom:link/@href | rss1:link}" target="_blank">
                         <span><xsl:value-of select="title | atom:title | rss1:title" /></span>
                     </a>
                   </xsl:when>
@@ -54,7 +54,7 @@
                 <div class="lastUpdated"><xsl:value-of select="pubDate | atom:updated | rss1:pubDate" /></div>
             </h3>
             <div class="feedRawContent">
-                <xsl:value-of select="description | atom:summary | rss1:description"  />
+                <xsl:value-of select="description | atom:summary | atom:content | rss1:description"  />
             </div>
             <div class="enclosures">
                 <xsl:for-each select="enclosure | atom:link[@rel='enclosure'] | rss1:enclosure">
