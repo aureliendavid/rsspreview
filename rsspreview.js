@@ -129,6 +129,32 @@
   }
 
 
+  function formattitles() {
+
+    var et = document.getElementsByClassName("entrytitle");
+    console.log(et);
+    for (var i = 0; i<et.length; i++) {
+
+      //basically removes html content if there is some
+      //only do it if there's a tag to avoid doing it when text titles cointain a '&'
+      //(which can be caught but still displays an error in console, which is annoying)
+
+      if (et[i].innerText.indexOf('<') >= 0) {
+
+        var tmp = document.createElement("span");
+        try {
+          tmp.innerHTML = et[i].innerText;
+          et[i].innerText = tmp.textContent;
+        }
+        catch (e) {}
+
+      }
+
+    }
+
+  }
+
+
   function addfeedurl(url) {
 
     var h1 = document.getElementById("feedTitleText");
@@ -215,6 +241,7 @@
         formatdescriptions();
         formatfilenames();
         formatfilesizes();
+        formattitles();
         extensionimages();
 
         document.title = /*"RSSPreview: " + */document.getElementById("feedTitleText").innerText;

@@ -43,11 +43,11 @@
                 <xsl:choose>
                   <xsl:when test="link | atom:link/@href | rss1:link">
                     <a href="{link | atom:link/@href | rss1:link}" target="_blank">
-                        <span><xsl:value-of select="title | atom:title | rss1:title" /></span>
+                        <span class="entrytitle"><xsl:value-of select="title | atom:title | rss1:title" /></span>
                     </a>
                   </xsl:when>
                   <xsl:otherwise>
-                    <span><xsl:value-of select="title | atom:title | rss1:link" /></span>
+                    <span class="entrytitle"><xsl:value-of select="title | atom:title | rss1:link" /></span>
                   </xsl:otherwise>
                 </xsl:choose>
 
