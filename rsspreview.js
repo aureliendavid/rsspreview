@@ -174,6 +174,38 @@
   }
 
 
+  function getlang() {
+    if (navigator.languages && navigator.languages[0])
+      return navigator.languages[0];
+    else if (navigator.language)
+      return navigator.language;
+    else
+      return null;
+  }
+
+  function formatdates() {
+
+    var lang = getlang();
+    if (!lang)
+      return;
+
+    var opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+
+    var ed = document.getElementsByClassName("lastUpdated");
+    for (var i = 0; i<ed.length; i++) {
+
+      var d = new Date(ed[i].innerText);
+      if (isNaN(d))
+        continue;
+
+      var dstr = d.toLocaleDateString(lang, opts) + ' ' + d.toLocaleTimeString(lang);
+      ed[i].innerText = dstr;
+
+    }
+
+  }
+
+
   function addfeedurl(url) {
 
     var h1 = document.getElementById("feedTitleText");
@@ -261,6 +293,7 @@
         formatfilenames();
         formatfilesizes();
         formattitles();
+        formatdates();
         extensionimages();
 
         document.title = /*"RSSPreview: " + */document.getElementById("feedTitleText").innerText;
