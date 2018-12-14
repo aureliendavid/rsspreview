@@ -55,26 +55,43 @@
     var tohtml = document.getElementsByClassName("feedRawContent");
     for (var i = 0; i<tohtml.length; i++) {
 
-      var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
-      var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+      try {
 
-      tohtml[i].insertAdjacentHTML('afterend', xml_desc);
+        var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
+        var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+
+        tohtml[i].insertAdjacentHTML('afterend', xml_desc);
+        tohtml[i].setAttribute("todel", 1);
+
+      }
+      catch (e) {
+        console.error(e);
+        console.log(tohtml[i].innerHTML);
+      }
 
     }
 
     document.querySelectorAll('.feedRawContent').forEach(function(a){
-      a.remove()
+      if (a.getAttribute("todel") == "1") {
+        a.remove();
+      }
     })
 
 
-    var feed_desc = document.getElementById("feedSubtitleRaw");
+    try {
+      var feed_desc = document.getElementById("feedSubtitleRaw");
 
-    var html_desc = html_parser.parseFromString('<h2 id="feedSubtitleText">'+feed_desc.innerText+'</h2>', "text/html");
-    var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+      var html_desc = html_parser.parseFromString('<h2 id="feedSubtitleText">'+feed_desc.innerText+'</h2>', "text/html");
+      var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
 
-    feed_desc.insertAdjacentHTML('afterend', xml_desc);
+      feed_desc.insertAdjacentHTML('afterend', xml_desc);
 
-    feed_desc.parentNode.removeChild(feed_desc);
+      feed_desc.parentNode.removeChild(feed_desc);
+    }
+    catch (e) {
+      console.error(e);
+      console.log(feed_desc.innerText);
+    }
 
 
   }
@@ -132,7 +149,6 @@
   function formattitles() {
 
     var et = document.getElementsByClassName("entrytitle");
-    console.log(et);
     for (var i = 0; i<et.length; i++) {
 
       //basically removes html content if there is some
@@ -146,7 +162,10 @@
           tmp.innerHTML = et[i].innerText;
           et[i].innerText = tmp.textContent;
         }
-        catch (e) {}
+        catch (e) {
+          console.error(e);
+          console.log(et[i].innerText);
+        }
 
       }
 
