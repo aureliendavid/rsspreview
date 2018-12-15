@@ -10,6 +10,8 @@
   }
   window.hasRun = true;
 
+  var xml_parser = new XMLSerializer();
+  var html_parser = new DOMParser();
 
 
   function xhrdoc(url, type, cb) {
@@ -45,38 +47,18 @@
 
   }
 
-  function formatdescriptions() {
 
-    // unescapes descriptions to html then to xml
+  function getlang() {
+    if (navigator.languages && navigator.languages[0])
+      return navigator.languages[0];
+    else if (navigator.language)
+      return navigator.language;
+    else
+      return null;
+  }
 
-    var xml_parser = new XMLSerializer();
-    var html_parser = new DOMParser();
 
-    var tohtml = document.getElementsByClassName("feedRawContent");
-    for (var i = 0; i<tohtml.length; i++) {
-
-      try {
-
-        var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
-        var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
-
-        tohtml[i].insertAdjacentHTML('afterend', xml_desc);
-        tohtml[i].setAttribute("todel", 1);
-
-      }
-      catch (e) {
-        console.error(e);
-        console.log(tohtml[i].innerHTML);
-      }
-
-    }
-
-    document.querySelectorAll('.feedRawContent').forEach(function(a){
-      if (a.getAttribute("todel") == "1") {
-        a.remove();
-      }
-    })
-
+  function formatsubtitle() {
 
     try {
       var feed_desc = document.getElementById("feedSubtitleRaw");
@@ -96,10 +78,43 @@
 
   }
 
+  function formatdescriptions(el=document) {
 
-  function removeemptyenclosures() {
+    // unescapes descriptions to html then to xml
 
-    var encs = document.getElementsByClassName("enclosures");
+    var tohtml = el.getElementsByClassName("feedRawContent");
+    for (var i = 0; i<tohtml.length; i++) {
+
+      try {
+
+        var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
+        var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+
+        tohtml[i].insertAdjacentHTML('afterend', xml_desc);
+        tohtml[i].setAttribute("todel", 1);
+
+      }
+      catch (e) {
+        console.error(e);
+        console.log(tohtml[i].innerHTML);
+      }
+
+    }
+
+    el.querySelectorAll('.feedRawContent').forEach(function(a){
+      if (a.getAttribute("todel") == "1") {
+        a.remove();
+      }
+    })
+
+  }
+
+
+
+
+  function removeemptyenclosures(el=document) {
+
+    var encs = el.getElementsByClassName("enclosures");
     for (var i = 0; i<encs.length; i++) {
 
       if (!encs[i].firstChild)
@@ -109,9 +124,9 @@
 
   }
 
-  function formatfilenames() {
+  function formatfilenames(el=document) {
 
-    var encfn = document.getElementsByClassName("enclosureFilename");
+    var encfn = el.getElementsByClassName("enclosureFilename");
     for (var i = 0; i<encfn.length; i++) {
       var url = new URL(encfn[i].innerText);
       if (url) {
@@ -126,7 +141,7 @@
   }
 
 
-  function formatfilesizes() {
+  function formatfilesizes(el=document) {
 
     function humanfilesize(size) {
       var i = 0;
@@ -135,7 +150,7 @@
         return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
     };
 
-    var encsz = document.getElementsByClassName("enclosureSize");
+    var encsz = el.getElementsByClassName("enclosureSize");
     for (var i = 0; i<encsz.length; i++) {
       var hsize = humanfilesize(encsz[i].innerText);
       if (hsize) {
@@ -146,9 +161,9 @@
   }
 
 
-  function formattitles() {
+  function formattitles(el=document) {
 
-    var et = document.getElementsByClassName("entrytitle");
+    var et = el.getElementsByClassName("entrytitle");
     for (var i = 0; i<et.length; i++) {
 
       //basically removes html content if there is some
@@ -174,16 +189,9 @@
   }
 
 
-  function getlang() {
-    if (navigator.languages && navigator.languages[0])
-      return navigator.languages[0];
-    else if (navigator.language)
-      return navigator.language;
-    else
-      return null;
-  }
 
-  function formatdates() {
+
+  function formatdates(el=document) {
 
     var lang = getlang();
     if (!lang)
@@ -191,7 +199,7 @@
 
     var opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-    var ed = document.getElementsByClassName("lastUpdated");
+    var ed = el.getElementsByClassName("lastUpdated");
     for (var i = 0; i<ed.length; i++) {
 
       var d = new Date(ed[i].innerText);
@@ -206,16 +214,10 @@
   }
 
 
-  function addfeedurl(url) {
 
-    var h1 = document.getElementById("feedTitleText");
-    h1.innerHTML += ' :: <a href="'+url+'"><img src="'+chrome.extension.getURL("icons/rss-32.png")+'" class="headerIcon" />Feed URL</a>';
-  }
+  function extensionimages(el=document) {
 
-
-  function extensionimages() {
-
-    var extimgs = document.getElementsByClassName("extImg");
+    var extimgs = el.getElementsByClassName("extImg");
     for (var i = 0; i<extimgs.length; i++) {
       extimgs[i].src = chrome.extension.getURL(extimgs[i].attributes['data-src'].nodeValue);
     }
@@ -288,18 +290,22 @@
         // replace the content with the preview document
         document.replaceChild(document.importNode(preview.documentElement, true), document.documentElement);
 
-        removeemptyenclosures();
+        var t0 = performance.now();
+
+        formatsubtitle();
+
         formatdescriptions();
+        removeemptyenclosures();
         formatfilenames();
         formatfilesizes();
         formattitles();
         formatdates();
         extensionimages();
 
-        document.title = /*"RSSPreview: " + */document.getElementById("feedTitleText").innerText;
+        var t1 = performance.now();
+        //console.log("exec in: " + (t1 - t0) + "ms");
 
-        //addfeedurl(feed_url);
-
+        document.title = document.getElementById("feedTitleText").innerText;
 
       });
 
