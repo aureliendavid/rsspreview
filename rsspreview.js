@@ -38,7 +38,6 @@
 
 
   function applyxsl(xmlin, xsl, node, doc=document) {
-
     var xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
 
@@ -85,18 +84,24 @@
     var tohtml = el.getElementsByClassName("feedRawContent");
     for (var i = 0; i<tohtml.length; i++) {
 
-      try {
-
-        var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
-        var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
-
-        tohtml[i].insertAdjacentHTML('afterend', xml_desc);
-        tohtml[i].setAttribute("todel", 1);
-
+      // in case of xhtml the content is already parsed
+      if (tohtml[i].getAttribute("desctype") == "xhtml") {
+        tohtml[i].classList.add("feedEntryContent");
+        tohtml[i].classList.remove("feedRawContent");
       }
-      catch (e) {
-        console.error(e);
-        console.log(tohtml[i].innerHTML);
+      else {
+
+        try {
+          var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
+          var xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+
+          tohtml[i].insertAdjacentHTML('afterend', xml_desc);
+          tohtml[i].setAttribute("todel", 1);
+        }
+        catch (e) {
+          console.error(e);
+          console.log(tohtml[i].innerHTML);
+        }
       }
 
     }

@@ -53,8 +53,8 @@
 
                 <div class="lastUpdated"><xsl:value-of select="pubDate | atom:updated | rss1:pubDate" /></div>
             </h3>
-            <div class="feedRawContent">
-                <xsl:value-of select="description | atom:summary | atom:content | rss1:description"  />
+            <div class="feedRawContent" desctype="{atom:content/@type}">
+                <xsl:copy-of select="description | atom:summary | atom:content | rss1:description"  />
             </div>
             <div class="enclosures">
                 <xsl:for-each select="enclosure | atom:link[@rel='enclosure'] | rss1:enclosure">
