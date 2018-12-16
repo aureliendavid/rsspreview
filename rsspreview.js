@@ -1,11 +1,11 @@
 (function() {
   /**
-   * Check and set a global guard letiable.
+   * Check and set a global guard variable.
    * If this content script is injected into the same page again,
    * it will do nothing next time.
    */
   if (window.hasRun) {
-    console.log("already run");
+    console.log('already run');
     return;
   }
 
@@ -15,7 +15,6 @@
   let html_parser = new DOMParser();
 
   function xhrdoc(url, type, cb) {
-
     let xhr = new XMLHttpRequest();
     xhr.open('GET', url, true);
 
@@ -25,7 +24,7 @@
     xhr.onload = () => {
       if (xhr.readyState === xhr.DONE) {
         if (xhr.status === 200) {
-          let resp = (type=="xml") ? xhr.responseXML : xhr.response;
+          let resp = type == 'xml' ? xhr.responseXML : xhr.response;
           cb(resp);
         }
       }
@@ -34,7 +33,7 @@
     xhr.send(null);
   }
 
-  function applyxsl(xmlin, xsl, node, doc=document) {
+  function applyxsl(xmlin, xsl, node, doc = document) {
     let xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
 
@@ -45,117 +44,120 @@
   function getlang() {
     if (navigator.languages && navigator.languages[0])
       return navigator.languages[0];
-    else if (navigator.language)
-      return navigator.language;
-    else
-      return null;
+    else if (navigator.language) return navigator.language;
+    else return null;
   }
 
   function formatsubtitle() {
     try {
-      let feed_desc = document.getElementById("feedSubtitleRaw");
+      let feed_desc = document.getElementById('feedSubtitleRaw');
 
-      let html_desc = html_parser.parseFromString('<h2 id="feedSubtitleText">'+feed_desc.innerText+'</h2>', "text/html");
+      let html_desc = html_parser.parseFromString(
+        '<h2 id="feedSubtitleText">' + feed_desc.innerText + '</h2>',
+        'text/html'
+      );
       let xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
 
       feed_desc.insertAdjacentHTML('afterend', xml_desc);
 
       feed_desc.parentNode.removeChild(feed_desc);
-    }
-    catch (e) {
+    } catch (e) {
       console.error(e);
       console.log(feed_desc.innerText);
     }
   }
 
-  function formatdescriptions(el=document) {
+  function formatdescriptions(el = document) {
     // unescapes descriptions to html then to xml
-    let tohtml = el.getElementsByClassName("feedRawContent");
+    let tohtml = el.getElementsByClassName('feedRawContent');
 
-    for (let i = 0; i<tohtml.length; i++) {
+    for (let i = 0; i < tohtml.length; i++) {
       // in case of xhtml the content is already parsed
-      if (tohtml[i].getAttribute("desctype") != "xhtml") {
+      if (tohtml[i].getAttribute('desctype') != 'xhtml') {
         try {
-          let html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
-          let xml_desc = xml_parser.serializeToString(html_desc.body.firstChild);
+          let html_desc = html_parser.parseFromString(
+            '<div class="feedEntryContent">' + tohtml[i].innerText + '</div>',
+            'text/html'
+          );
+          let xml_desc = xml_parser.serializeToString(
+            html_desc.body.firstChild
+          );
 
           tohtml[i].insertAdjacentHTML('afterend', xml_desc);
-          tohtml[i].setAttribute("todel", 1);
-        }
-        catch (e) {
+          tohtml[i].setAttribute('todel', 1);
+        } catch (e) {
           console.error(e);
           console.log(tohtml[i].innerHTML);
         }
       }
     }
 
-    el.querySelectorAll('.feedRawContent').forEach((a) => {
-      if (a.getAttribute("todel") == "1") {
+    el.querySelectorAll('.feedRawContent').forEach(a => {
+      if (a.getAttribute('todel') == '1') {
         a.remove();
+      } else if (a.getAttribute('desctype') == 'xhtml') {
+        a.classList.add('feedEntryContent');
+        a.classList.remove('feedRawContent');
       }
-      else if (a.getAttribute("desctype") == "xhtml") {
-        a.classList.add("feedEntryContent");
-        a.classList.remove("feedRawContent");
-      }
-    })
+    });
   }
 
-  function removeemptyenclosures(el=document) {
-    let encs = el.getElementsByClassName("enclosures");
+  function removeemptyenclosures(el = document) {
+    let encs = el.getElementsByClassName('enclosures');
 
     for (let i = 0; i < encs.length; i++)
-      if (!encs[i].firstChild)
-        encs[i].style.display = "none";
+      if (!encs[i].firstChild) encs[i].style.display = 'none';
   }
 
-  function formatfilenames(el=document) {
-    let encfn = el.getElementsByClassName("enclosureFilename");
+  function formatfilenames(el = document) {
+    let encfn = el.getElementsByClassName('enclosureFilename');
 
-    for (let i = 0; i<encfn.length; i++) {
+    for (let i = 0; i < encfn.length; i++) {
       let url = new URL(encfn[i].innerText);
 
       if (url) {
-        let fn = url.pathname.split("/").pop();
+        let fn = url.pathname.split('/').pop();
 
-        if (fn != "")
-          encfn[i].innerText = fn;
+        if (fn != '') encfn[i].innerText = fn;
       }
     }
   }
 
-  function formatfilesizes(el=document) {
+  function formatfilesizes(el = document) {
     function humanfilesize(size) {
       let i = 0;
 
-      if (size && size != "" && size > 0)
-        i = Math.floor( Math.log(size) / Math.log(1024) );
+      if (size && size != '' && size > 0)
+        i = Math.floor(Math.log(size) / Math.log(1024));
 
-      return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-    };
+      return (
+        (size / Math.pow(1024, i)).toFixed(2) * 1 +
+        ' ' +
+        ['B', 'kB', 'MB', 'GB', 'TB'][i]
+      );
+    }
 
-    let encsz = el.getElementsByClassName("enclosureSize");
-    for (let i = 0; i<encsz.length; i++) {
+    let encsz = el.getElementsByClassName('enclosureSize');
+    for (let i = 0; i < encsz.length; i++) {
       let hsize = humanfilesize(encsz[i].innerText);
 
-      if (hsize)
-        encsz[i].innerText = hsize;
+      if (hsize) encsz[i].innerText = hsize;
     }
   }
 
-  function formattitles(el=document) {
-    let et = el.getElementsByClassName("entrytitle");
+  function formattitles(el = document) {
+    let et = el.getElementsByClassName('entrytitle');
 
-    for (let i = 0; i<et.length; i++) {
+    for (let i = 0; i < et.length; i++) {
       //basically removes html content if there is some
       //only do it if there's a tag to avoid doing it when text titles cointain a '&'
       //(which can be caught but still displays an error in console, which is annoying)
       if (et[i].innerText.indexOf('<') >= 0) {
-        let tmp = document.createElement("span");
+        let tmp = document.createElement('span');
         try {
           tmp.innerHTML = et[i].innerText;
           et[i].innerText = tmp.textContent;
-        }
-        catch (e) {
+        } catch (e) {
           console.error(e);
           console.log(et[i].innerText);
         }
@@ -163,67 +165,74 @@
     }
   }
 
-  function formatdates(el=document) {
+  function formatdates(el = document) {
     let lang = getlang();
-    if (!lang)
-      return;
+    if (!lang) return;
 
-    let opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let opts = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
 
-    let ed = el.getElementsByClassName("lastUpdated");
-    for (let i = 0; i<ed.length; i++) {
+    let ed = el.getElementsByClassName('lastUpdated');
+    for (let i = 0; i < ed.length; i++) {
       let d = new Date(ed[i].innerText);
-      if (isNaN(d))
-        continue;
+      if (isNaN(d)) continue;
 
-      let dstr = d.toLocaleDateString(lang, opts) + ' ' + d.toLocaleTimeString(lang);
+      let dstr =
+        d.toLocaleDateString(lang, opts) + ' ' + d.toLocaleTimeString(lang);
 
       ed[i].innerText = dstr;
     }
   }
 
-  function extensionimages(el=document) {
-    let extimgs = el.getElementsByClassName("extImg");
+  function extensionimages(el = document) {
+    let extimgs = el.getElementsByClassName('extImg');
 
-    for (let i = 0; i<extimgs.length; i++)
-      extimgs[i].src = chrome.extension.getURL(extimgs[i].attributes['data-src'].nodeValue);
+    for (let i = 0; i < extimgs.length; i++)
+      extimgs[i].src = chrome.extension.getURL(
+        extimgs[i].attributes['data-src'].nodeValue
+      );
   }
 
   function makepreviewhtml() {
-    let doc = document.implementation.createHTMLDocument("");
+    let doc = document.implementation.createHTMLDocument('');
 
-    let feedBody = doc.createElement("div");
-    feedBody.id = "feedBody";
+    let feedBody = doc.createElement('div');
+    feedBody.id = 'feedBody';
     doc.body.appendChild(feedBody);
 
     let css = doc.createElement('link');
     css.setAttribute('rel', 'stylesheet');
-    css.setAttribute('href', chrome.extension.getURL("preview.css"));
+    css.setAttribute('href', chrome.extension.getURL('preview.css'));
     doc.head.appendChild(css);
 
     return doc;
   }
 
-
   function detect() {
     let rootNode = document.getRootNode().documentElement;
 
     // for chrome
-    let d = document.getElementById("webkit-xml-viewer-source-xml");
-    if (d && d.firstChild)
-      rootNode = d.firstChild;
+    let d = document.getElementById('webkit-xml-viewer-source-xml');
+    if (d && d.firstChild) rootNode = d.firstChild;
 
     const rootName = rootNode.nodeName.toLowerCase();
 
     let isRSS1 = false;
 
-    if (rootName == "rdf" || rootName == "rdf:rdf")
+    if (rootName == 'rdf' || rootName == 'rdf:rdf')
       if (rootNode.attributes['xmlns'])
-        isRSS1 = (rootNode.attributes['xmlns'].nodeValue.search('rss') > 0)
+        isRSS1 = rootNode.attributes['xmlns'].nodeValue.search('rss') > 0;
 
-    if ( rootName == "rss" || rootName == "channel"  // rss2
-      || rootName == "feed"  // atom
-      || isRSS1 )
+    if (
+      rootName == 'rss' ||
+      rootName == 'channel' || // rss2
+      rootName == 'feed' || // atom
+      isRSS1
+    )
       return rootNode;
 
     return null;
@@ -233,11 +242,14 @@
     let feed_url = window.location.href;
     let preview = makepreviewhtml();
 
-    xhrdoc(chrome.extension.getURL("rss.xsl"), "xml", (xsl_xml) => {
-      applyxsl(feedNode, xsl_xml, preview.getElementById("feedBody"), preview);
+    xhrdoc(chrome.extension.getURL('rss.xsl'), 'xml', xsl_xml => {
+      applyxsl(feedNode, xsl_xml, preview.getElementById('feedBody'), preview);
 
       // replace the content with the preview document
-      document.replaceChild(document.importNode(preview.documentElement, true), document.documentElement);
+      document.replaceChild(
+        document.importNode(preview.documentElement, true),
+        document.documentElement
+      );
 
       let t0 = performance.now();
 
@@ -254,13 +266,11 @@
       let t1 = performance.now();
       //console.log("exec in: " + (t1 - t0) + "ms");
 
-      document.title = document.getElementById("feedTitleText").innerText;
+      document.title = document.getElementById('feedTitleText').innerText;
     });
   }
 
   let feedRoot = detect();
 
-  if (feedRoot)
-    main(feedRoot);
-
+  if (feedRoot) main(feedRoot);
 })();
