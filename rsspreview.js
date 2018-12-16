@@ -85,11 +85,7 @@
     for (var i = 0; i<tohtml.length; i++) {
 
       // in case of xhtml the content is already parsed
-      if (tohtml[i].getAttribute("desctype") == "xhtml") {
-        tohtml[i].classList.add("feedEntryContent");
-        tohtml[i].classList.remove("feedRawContent");
-      }
-      else {
+      if (tohtml[i].getAttribute("desctype") != "xhtml") {
 
         try {
           var html_desc = html_parser.parseFromString('<div class="feedEntryContent">'+tohtml[i].innerText+'</div>', "text/html");
@@ -109,6 +105,10 @@
     el.querySelectorAll('.feedRawContent').forEach(function(a){
       if (a.getAttribute("todel") == "1") {
         a.remove();
+      }
+      else if (a.getAttribute("desctype") == "xhtml") {
+        a.classList.add("feedEntryContent");
+        a.classList.remove("feedRawContent");
       }
     })
 
