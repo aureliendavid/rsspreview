@@ -1,5 +1,3 @@
-
-
 html {
   font: 3mm tahoma,arial,helvetica,sans-serif;
   background-color: rgb(240, 240, 240);
@@ -52,8 +50,6 @@ a[href] img {
   margin-top: 0;
   margin-bottom: 0;
 }
-
-
 
 #feedTitleContainer {
   margin-inline-start: 0;
