@@ -197,6 +197,37 @@
       );
   }
 
+  function applysettings() {
+
+    function onResult(options) {
+
+      document.querySelectorAll('.mediaThumb').forEach((elem) => {
+        elem.style.display = options.doThumb ? "block" : "none";
+      });
+
+
+      document.querySelectorAll('img').forEach((elem) => {
+        if (options.doMaxWidth)
+          elem.style["max-width"] = options.valMaxWidth;
+      });
+
+
+    }
+
+    function onError(error) {
+      console.log(`Error: ${error}`);
+    }
+
+    var getting = browser.storage.sync.get({
+      doThumb: false,
+      doMaxWidth: true,
+      valMaxWidth: "900px"
+    });
+    getting.then(onResult, onError);
+
+
+  }
+
   function makepreviewhtml() {
     let doc = document.implementation.createHTMLDocument('');
 
@@ -262,6 +293,7 @@
       formattitles();
       formatdates();
       extensionimages();
+      applysettings();
 
       let t1 = performance.now();
       //console.log("exec in: " + (t1 - t0) + "ms");
