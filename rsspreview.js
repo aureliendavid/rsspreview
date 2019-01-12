@@ -75,10 +75,16 @@
       // in case of xhtml the content is already parsed
       if (tohtml[i].getAttribute('desctype') != 'xhtml') {
         try {
-          let html_desc = html_parser.parseFromString(
-            '<div class="feedEntryContent">' + tohtml[i].innerText + '</div>',
-            'text/html'
-          );
+
+          let html_txt = '';
+          if (tohtml[i].getAttribute('desctype') == 'text/plain') {
+            html_txt = '<div class="feedEntryContent" style="white-space: pre-wrap;" >' + tohtml[i].innerHTML + '</div>';
+          }
+          else {
+            html_txt = '<div class="feedEntryContent">' + tohtml[i].innerText + '</div>';
+          }
+
+          let html_desc = html_parser.parseFromString(html_txt, 'text/html');
           let xml_desc = xml_parser.serializeToString(
             html_desc.body.firstChild
           );
