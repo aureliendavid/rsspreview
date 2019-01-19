@@ -5,7 +5,8 @@ function saveOptions(e) {
   browser.storage.sync.set({
     doThumb: document.querySelector("#doThumb").checked,
     doMaxWidth: document.querySelector("#doMaxWidth").checked,
-    valMaxWidth: document.querySelector("#valMaxWidth").value
+    valMaxWidth: document.querySelector("#valMaxWidth").value,
+    doDetect: document.querySelector("#doDetect").checked
   });
 }
 
@@ -17,6 +18,7 @@ function restoreOptions() {
     document.querySelector("#doThumb").checked = result.doThumb;
     document.querySelector("#doMaxWidth").checked = result.doMaxWidth;
     document.querySelector("#valMaxWidth").value = result.valMaxWidth;
+    document.querySelector("#doDetect").checked = result.doDetect;
   }
 
   function onError(error) {
@@ -26,7 +28,8 @@ function restoreOptions() {
   var getting = browser.storage.sync.get({
     doThumb: false,
     doMaxWidth: true,
-    valMaxWidth: "900px"
+    valMaxWidth: "900px",
+    doDetect: false
   });
   getting.then(onResult, onError);
 

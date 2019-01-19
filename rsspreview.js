@@ -311,4 +311,59 @@
   let feedRoot = detect();
 
   if (feedRoot) main(feedRoot);
+  else {
+
+    function onResult(options) {
+      if (options.doDetect)
+        findFeeds();
+    }
+
+    function onError(error) {
+      console.log(`Error: ${error}`);
+    }
+
+    let getting = browser.storage.sync.get({
+      doDetect: false
+    });
+    getting.then(onResult, onError);
+  }
+
+
+
+  function findFeeds() {
+
+    let feeds = {};
+
+    document.querySelectorAll("link[rel='alternate']").forEach( (elem) => {
+
+      let type = elem.getAttribute('type').toLowerCase();
+      if (type.includes('rss') || type.includes('atom') || type.includes('feed')) {
+
+        let title = elem.getAttribute('title');
+        let url = elem.href;
+
+        if (url) {
+
+          feeds[url] = (title ? title : url);
+
+          //console.log("Feed: " + (title ? (title + " - ") : "") + url);
+        }
+      }
+    })
+
+    if (Object.keys(feeds).length > 0) {
+
+      function handleResponse(message) {
+      }
+
+      function handleError(error) {
+        //console.log(error);
+      }
+
+      browser.runtime.sendMessage(feeds).then(handleResponse, handleError);
+    }
+
+  }
+
+
 })();

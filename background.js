@@ -39,3 +39,17 @@ browser.webRequest.onHeadersReceived.addListener(
   { urls: ['<all_urls>'], types: ['main_frame'] },
   ['blocking', 'responseHeaders']
 );
+
+
+function handleMessage(request, sender, sendResponse) {
+
+  let popup = new URL(browser.runtime.getURL('popup/popup.html'));
+  popup.searchParams.set('feeds', JSON.stringify(request));
+
+  browser.pageAction.setPopup( {tabId: sender.tab.id, popup: popup.toString() });
+  browser.pageAction.show(sender.tab.id);
+
+  //sendResponse({response: "Response from background script to tab " + sender.tab.url , id: sender.tab.id });
+}
+
+browser.runtime.onMessage.addListener(handleMessage);

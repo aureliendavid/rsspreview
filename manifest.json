@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "RSSPreview",
-  "version": "2.8",
+  "version": "3.0",
   "author": "Aurelien David",
   "homepage_url": "https://github.com/aureliendavid/rsspreview",
 
@@ -36,12 +36,21 @@
     "page": "settings/options.html"
   },
 
+  "page_action": {
+    "browser_style": true,
+    "default_icon": {
+      "19": "icons/rss-gray-19.png",
+      "38": "icons/rss-gray-38.png"
+    },
+    "default_title": "Feeds in page"
+  },
+
   "applications": {
     "gecko": {
       "id": "{7799824a-30fe-4c67-8b3e-7094ea203c94}"
     }
   },
 
-  "permissions": ["<all_urls>", "webRequest", "webRequestBlocking", "storage"]
+  "permissions": ["<all_urls>", "webRequest", "webRequestBlocking", "storage", "tabs"]
 
 }
