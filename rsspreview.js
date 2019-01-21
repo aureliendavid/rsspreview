@@ -336,7 +336,12 @@
 
     document.querySelectorAll("link[rel='alternate']").forEach( (elem) => {
 
-      let type = elem.getAttribute('type').toLowerCase();
+      let type_attr = elem.getAttribute('type');
+      if (!type_attr) {
+        return;
+      }
+
+      let type = type_attr.toLowerCase();
       if (type.includes('rss') || type.includes('atom') || type.includes('feed')) {
 
         let title = elem.getAttribute('title');
@@ -346,10 +351,9 @@
 
           feeds[url] = (title ? title : url);
 
-          //console.log("Feed: " + (title ? (title + " - ") : "") + url);
         }
       }
-    })
+    });
 
     if (Object.keys(feeds).length > 0) {
 
