@@ -1,14 +1,21 @@
 function detectFeed(event) {
+
+  if (event.statusCode == 301 || event.statusCode == 302)
+    return { responseHeaders: event.responseHeaders };
+
+
   // force application/rss+xml to text/xml so the browser displays it instead of downloading
   let isfeed = false;
 
   for (let header of event.responseHeaders) {
     if (header.name.toLowerCase() == 'content-type') {
-      header.value = header.value.replace(
-        /application\/(rss|atom)\+xml/,
-        'text/xml'
-      );
-      isfeed = true;
+      if (header.value.match(/application\/(rss|atom)\+xml/)) {
+        header.value = header.value.replace(
+          /application\/(rss|atom)\+xml/,
+          'text/xml'
+        );
+        isfeed = true;
+      }
       break;
     }
   }
