@@ -72,38 +72,37 @@
     let tohtml = el.getElementsByClassName('feedRawContent');
 
     for (let i = 0; i < tohtml.length; i++) {
-      // in case of xhtml the content is already parsed
-      if (tohtml[i].getAttribute('desctype') != 'xhtml') {
-        try {
 
-          let html_txt = '';
-          if (tohtml[i].getAttribute('desctype') == 'text/plain') {
-            html_txt = '<div class="feedEntryContent" style="white-space: pre-wrap;" >' + tohtml[i].innerHTML + '</div>';
-          }
-          else {
-            html_txt = '<div class="feedEntryContent">' + tohtml[i].innerText + '</div>';
-          }
+      try {
 
-          let html_desc = html_parser.parseFromString(html_txt, 'text/html');
-          let xml_desc = xml_parser.serializeToString(
-            html_desc.body.firstChild
-          );
-
-          tohtml[i].insertAdjacentHTML('afterend', xml_desc);
-          tohtml[i].setAttribute('todel', 1);
-        } catch (e) {
-          console.error(e);
-          console.log(tohtml[i].innerHTML);
+        let html_txt = '';
+        if (tohtml[i].getAttribute('desctype') == 'text/plain') {
+          html_txt = '<div class="feedEntryContent" style="white-space: pre-wrap;" >' + tohtml[i].innerHTML + '</div>';
         }
+        else if (tohtml[i].getAttribute('desctype') == 'xhtml') {
+          html_txt = '<div class="feedEntryContent">' + tohtml[i].innerHTML + '</div>';
+        }
+        else {
+          html_txt = '<div class="feedEntryContent">' + tohtml[i].innerText + '</div>';
+        }
+
+        let html_desc = html_parser.parseFromString(html_txt, 'text/html');
+        let xml_desc = xml_parser.serializeToString(
+          html_desc.body.firstChild
+        );
+
+        tohtml[i].insertAdjacentHTML('afterend', xml_desc);
+        tohtml[i].setAttribute('todel', 1);
+      } catch (e) {
+        console.error(e);
+        console.log(tohtml[i].innerHTML);
       }
+
     }
 
     el.querySelectorAll('.feedRawContent').forEach(a => {
       if (a.getAttribute('todel') == '1') {
         a.remove();
-      } else if (a.getAttribute('desctype') == 'xhtml') {
-        a.classList.add('feedEntryContent');
-        a.classList.remove('feedRawContent');
       }
     });
   }
