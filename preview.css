@@ -35,10 +35,6 @@ a[href] img {
   border: none;
 }
 
-pre {
-  white-space: pre-wrap;
-}
-
 #feedBody {
   border: 1px solid THreeDShadow;
   padding: 3em;
