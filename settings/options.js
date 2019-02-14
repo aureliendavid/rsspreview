@@ -6,7 +6,8 @@ function saveOptions(e) {
     doThumb: document.querySelector("#doThumb").checked,
     doMaxWidth: document.querySelector("#doMaxWidth").checked,
     valMaxWidth: document.querySelector("#valMaxWidth").value,
-    doDetect: document.querySelector("#doDetect").checked
+    doDetect: document.querySelector("#doDetect").checked,
+    preventPreview: document.querySelector("#preventPreview").checked
   });
 }
 
@@ -19,6 +20,7 @@ function restoreOptions() {
     document.querySelector("#doMaxWidth").checked = result.doMaxWidth;
     document.querySelector("#valMaxWidth").value = result.valMaxWidth;
     document.querySelector("#doDetect").checked = result.doDetect;
+    document.querySelector("#preventPreview").checked = result.preventPreview;
   }
 
   function onError(error) {
@@ -29,7 +31,8 @@ function restoreOptions() {
     doThumb: false,
     doMaxWidth: true,
     valMaxWidth: "900px",
-    doDetect: false
+    doDetect: false,
+    preventPreview: false
   });
   getting.then(onResult, onError);
 

@@ -11,6 +11,15 @@
 
   window.hasRun = true;
 
+  // defaults
+  var options = {
+    doThumb: false,
+    doMaxWidth: true,
+    valMaxWidth: "900px",
+    doDetect: false,
+    preventPreview: false
+  };
+
   let xml_parser = new XMLSerializer();
   let html_parser = new DOMParser();
 
@@ -204,32 +213,15 @@
 
   function applysettings() {
 
-    function onResult(options) {
-
-      document.querySelectorAll('.mediaThumb').forEach((elem) => {
-        elem.style.display = options.doThumb ? "block" : "none";
-      });
-
-
-      document.querySelectorAll('img').forEach((elem) => {
-        if (options.doMaxWidth)
-          elem.style["max-width"] = options.valMaxWidth;
-      });
-
-
-    }
-
-    function onError(error) {
-      console.log(`Error: ${error}`);
-    }
-
-    var getting = browser.storage.sync.get({
-      doThumb: false,
-      doMaxWidth: true,
-      valMaxWidth: "900px"
+    document.querySelectorAll('.mediaThumb').forEach((elem) => {
+      elem.style.display = options.doThumb ? "block" : "none";
     });
-    getting.then(onResult, onError);
 
+
+    document.querySelectorAll('img').forEach((elem) => {
+      if (options.doMaxWidth)
+        elem.style["max-width"] = options.valMaxWidth;
+    });
 
   }
 
@@ -307,26 +299,30 @@
     });
   }
 
-  let feedRoot = detect();
 
-  if (feedRoot) main(feedRoot);
-  else {
+  function onOptions(opts) {
+    options = opts;
 
-    function onResult(options) {
-      if (options.doDetect)
-        findFeeds();
+    let feedRoot = detect();
+
+    if (feedRoot && !options.preventPreview) {
+
+      main(feedRoot);
     }
 
-    function onError(error) {
-      console.log(`Error: ${error}`);
+    else if (options.doDetect) {
+
+      findFeeds();
     }
 
-    let getting = browser.storage.sync.get({
-      doDetect: false
-    });
-    getting.then(onResult, onError);
   }
 
+  function onError(error) {
+    console.log(`Error on get options: ${error}`);
+  }
+
+  let getting = browser.storage.sync.get(options);
+  getting.then(onOptions, onError);
 
 
   function findFeeds() {

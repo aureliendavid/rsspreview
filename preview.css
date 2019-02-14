@@ -51,6 +51,10 @@ code {
   white-space: inherit;
 }
 
+img {
+  height: auto;
+}
+
 #feedBody {
   border: 1px solid THreeDShadow;
   padding: 3em;
