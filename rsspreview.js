@@ -17,7 +17,9 @@
     doMaxWidth: true,
     valMaxWidth: "900px",
     doDetect: false,
-    preventPreview: false
+    preventPreview: false,
+    enableCss: false,
+    customCss: null
   };
 
   let xml_parser = new XMLSerializer();
@@ -227,6 +229,7 @@
 
   function makepreviewhtml() {
     let doc = document.implementation.createHTMLDocument('');
+    doc.body.id = "rsspreviewBody";
 
     let feedBody = doc.createElement('div');
     feedBody.id = 'feedBody';
@@ -236,6 +239,12 @@
     css.setAttribute('rel', 'stylesheet');
     css.setAttribute('href', chrome.extension.getURL('preview.css'));
     doc.head.appendChild(css);
+
+    if (options.enableCss && options.customCss) {
+      let node = doc.createElement('style');
+      node.innerHTML = options.customCss;
+      doc.head.appendChild(node);
+    }
 
     return doc;
   }

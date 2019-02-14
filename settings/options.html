@@ -7,6 +7,11 @@
 
   <body>
 
+    <label class="setting browser-style"><input type="checkbox" id="doDetect" class="validate" > Enable feed detection</label>
+    <hr />
+    <label class="setting browser-style"><input type="checkbox" id="preventPreview" class="validate" > Display raw xml instead of preview page</label>
+    <hr />
+
     <label class="setting browser-style"><input type="checkbox" id="doThumb" class="validate" > Display media:thumbnail images</label>
 
     <label class="setting browser-style">
@@ -14,9 +19,10 @@
       <input type="text" id="valMaxWidth" class="validate" >
     </label>
     <hr />
-    <label class="setting browser-style"><input type="checkbox" id="doDetect" class="validate" > Enable feed detection</label>
-    <hr />
-    <label class="setting browser-style"><input type="checkbox" id="preventPreview" class="validate" > Display raw xml instead of preview page</label>
+
+    <label class="setting browser-style"><input type="checkbox" id="enableCss" class="validate" > Enable custom CSS:</label><br />
+    <textarea class="setting browser-style validate" id="customCss" rows="7" cols="50" style="font-family: monospace;"></textarea>
+
     <script src="options.js"></script>
 
   </body>

@@ -7,7 +7,9 @@ function saveOptions(e) {
     doMaxWidth: document.querySelector("#doMaxWidth").checked,
     valMaxWidth: document.querySelector("#valMaxWidth").value,
     doDetect: document.querySelector("#doDetect").checked,
-    preventPreview: document.querySelector("#preventPreview").checked
+    preventPreview: document.querySelector("#preventPreview").checked,
+    enableCss: document.querySelector("#enableCss").checked,
+    customCss: document.querySelector("#customCss").value
   });
 }
 
@@ -21,6 +23,8 @@ function restoreOptions() {
     document.querySelector("#valMaxWidth").value = result.valMaxWidth;
     document.querySelector("#doDetect").checked = result.doDetect;
     document.querySelector("#preventPreview").checked = result.preventPreview;
+    document.querySelector("#enableCss").checked = result.enableCss;
+    document.querySelector("#customCss").value = result.customCss;
   }
 
   function onError(error) {
@@ -32,7 +36,9 @@ function restoreOptions() {
     doMaxWidth: true,
     valMaxWidth: "900px",
     doDetect: false,
-    preventPreview: false
+    preventPreview: false,
+    enableCss: false,
+    customCss: null
   });
   getting.then(onResult, onError);
 
