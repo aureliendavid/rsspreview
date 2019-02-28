@@ -18,6 +18,7 @@
     valMaxWidth: "900px",
     doDetect: false,
     preventPreview: false,
+    fullPreview: false,
     enableCss: false,
     customCss: null
   };
@@ -47,6 +48,7 @@
   function applyxsl(xmlin, xsl, node, doc = document) {
     let xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
+    xsltProcessor.setParameter(null, 'fullPreview', options.fullPreview);
 
     let fragment = xsltProcessor.transformToFragment(xmlin, doc);
     node.appendChild(fragment);

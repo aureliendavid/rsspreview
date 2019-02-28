@@ -8,8 +8,9 @@
     xmlns:media="http://search.yahoo.com/mrss/"
     exclude-result-prefixes="atom atom03 rdf rss1 media" >
 
-    <xsl:output method="html" indent="yes" encoding="utf-8" />
+    <xsl:param name="fullPreview" />
 
+    <xsl:output method="html" indent="yes" encoding="utf-8" />
 
     <xsl:template match="channel | atom:feed | atom03:feed | rss1:channel">
 
@@ -58,7 +59,7 @@
                 <img class="mediaThumb" src="{ .//media:thumbnail/@url }" width="{ .//media:thumbnail/@width }" height="{ .//media:thumbnail/@height }" />
             </xsl:if>
             <xsl:choose>
-              <xsl:when test="atom:summary | atom03:summary">
+              <xsl:when test="not($fullPreview) and atom:summary | atom03:summary">
                 <div class="feedRawContent" desctype="{atom:summary/@type | atom03:summary/@type }">
                     <xsl:copy-of select="atom:summary | atom03:summary"  />
                 </div>
