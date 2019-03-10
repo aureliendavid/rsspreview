@@ -340,6 +340,23 @@
 
     let feeds = {};
 
+    function registerFeeds(feeds) {
+
+      if (Object.keys(feeds).length > 0) {
+
+        function handleResponse(message) {
+        }
+
+        function handleError(error) {
+          //console.log(error);
+        }
+
+        browser.runtime.sendMessage(feeds).then(handleResponse, handleError);
+      }
+    }
+
+    var async_send = false;
+
     document.querySelectorAll("link[rel='alternate']").forEach( (elem) => {
 
       let type_attr = elem.getAttribute('type');
@@ -361,17 +378,41 @@
       }
     });
 
-    if (Object.keys(feeds).length > 0) {
+    if (document.domain == "itunes.apple.com") {
 
-      function handleResponse(message) {
+      let match = document.URL.match(/id(\d+)/)
+      if (match) {
+        let itunesid = match[1];
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', "https://itunes.apple.com/lookup?id="+itunesid+"&entity=podcast");
+
+        xhr.onload = function () {
+          if (xhr.readyState === xhr.DONE) {
+            if (xhr.status === 200) {
+              let res = JSON.parse(xhr.responseText);
+
+              if ("results" in res) {
+
+                let pod = res["results"][0];
+                let title =  pod["collectionName"] || document.title;
+                let url = pod["feedUrl"];
+                if (url) {
+                  feeds[url] = title;
+                }
+              }
+            }
+          }
+
+          registerFeeds(feeds);
+        };
+        async_send = true;
+        xhr.send();
       }
-
-      function handleError(error) {
-        //console.log(error);
-      }
-
-      browser.runtime.sendMessage(feeds).then(handleResponse, handleError);
     }
+
+    if (!async_send)
+      registerFeeds(feeds);
 
   }
 
