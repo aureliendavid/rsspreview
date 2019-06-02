@@ -37,7 +37,7 @@ function restoreOptions() {
     doThumb: false,
     doMaxWidth: true,
     valMaxWidth: "900px",
-    doDetect: false,
+    doDetect: true,
     preventPreview: false,
     fullPreview: false,
     enableCss: false,
