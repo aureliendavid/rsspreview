@@ -45,10 +45,16 @@ pre {
   word-break: break-all;
 }
 
+
 code {
-  display: block;
   overflow: auto;
   white-space: inherit;
+}
+
+code > pre, pre > code {
+  display: block;
+  overflow: auto;
+  white-space: pre;
 }
 
 img {

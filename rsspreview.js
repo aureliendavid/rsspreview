@@ -49,7 +49,6 @@
     let xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
     xsltProcessor.setParameter(null, 'fullPreview', options.fullPreview);
-
     let fragment = xsltProcessor.transformToFragment(xmlin, doc);
     node.appendChild(fragment);
   }
@@ -87,7 +86,6 @@
     for (let i = 0; i < tohtml.length; i++) {
 
       try {
-
         let html_txt = '';
         if (tohtml[i].getAttribute('desctype') == 'text/plain') {
           html_txt = '<div class="feedEntryContent" style="white-space: pre-wrap;" >' + tohtml[i].innerHTML + '</div>';
@@ -96,7 +94,7 @@
           html_txt = '<div class="feedEntryContent">' + tohtml[i].innerHTML + '</div>';
         }
         else {
-          html_txt = '<div class="feedEntryContent">' + tohtml[i].innerText + '</div>';
+          html_txt = '<div class="feedEntryContent">' + tohtml[i].textContent + '</div>';
         }
 
         let html_desc = html_parser.parseFromString(html_txt, 'text/html');
