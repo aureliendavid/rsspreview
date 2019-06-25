@@ -376,7 +376,7 @@
       }
     });
 
-    if (document.domain == "itunes.apple.com") {
+    if (document.domain == "itunes.apple.com" || document.domain == "podcasts.apple.com") {
 
       let match = document.URL.match(/id(\d+)/)
       if (match) {
