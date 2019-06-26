@@ -12,20 +12,20 @@
 
     <xsl:output method="html" indent="yes" encoding="utf-8" />
 
-    <xsl:template match="channel | atom:feed | atom03:feed | rss1:channel">
+    <xsl:template match="channel | rss1:channel | atom:feed | atom03:feed">
 
 
       <div id="feedTitle">
         <a id="feedTitleLink">
-          <img id="feedTitleImage" src="{image/url | atom:logo | atom03:logo | rss1:image/rss1:url }" />
+          <img id="feedTitleImage" src="{image/url | rss1:image/rss1:url | atom:logo | atom03:logo }" />
         </a>
         <div id="feedTitleContainer">
           <h1 id="feedTitleText" >
-            <a href="{link | atom:link[@rel='alternate']/@href | atom03:link[@rel='alternate']/@href | rss1:link}" target="_blank">
-            <xsl:value-of select="title | atom:title | atom03:title | rss1:title" />
+            <a href="{link | rss1:link | atom:link[@rel='alternate']/@href | atom03:link[@rel='alternate']/@href}" target="_blank">
+            <xsl:value-of select="title | rss1:title | atom:title | atom03:title" />
             </a>
           </h1>
-          <h2 id="feedSubtitleRaw" ><xsl:value-of select="description | atom:subtitle | atom03:subtitle | rss1:description" /></h2>
+          <h2 id="feedSubtitleRaw" ><xsl:value-of select="description | rss1:description | atom:subtitle | atom03:subtitle" /></h2>
         </div>
       </div>
 
@@ -47,17 +47,17 @@
                         <span class="entrytitle"><xsl:value-of select="atom:title | atom03:title" /></span>
                     </a>
                   </xsl:when>
-                  <xsl:when test="link | atom:link/@href | atom:link/@href | atom03:link/@href | rss1:link">
-                    <a href="{link | atom:link/@href | atom03:link/@href | rss1:link}" target="_blank">
-                        <span class="entrytitle"><xsl:value-of select="title | atom:title | atom03:title | rss1:title" /></span>
+                  <xsl:when test="link | rss1:link | atom:link/@href | atom03:link/@href">
+                    <a href="{link | rss1:link | atom:link/@href | atom03:link/@href}" target="_blank">
+                        <span class="entrytitle"><xsl:value-of select="title | rss1:title | atom:title | atom03:title" /></span>
                     </a>
                   </xsl:when>
                   <xsl:otherwise>
-                    <span class="entrytitle"><xsl:value-of select="title | atom:title | atom03:title | rss1:link" /></span>
+                    <span class="entrytitle"><xsl:value-of select="title | rss1:link | atom:title | atom03:title" /></span>
                   </xsl:otherwise>
                 </xsl:choose>
 
-                <div class="lastUpdated"><xsl:value-of select="pubDate | atom:updated | atom03:updated | rss1:pubDate" /></div>
+                <div class="lastUpdated"><xsl:value-of select="pubDate | rss1:pubDate | atom:updated | atom03:updated" /></div>
             </h3>
 
             <xsl:if test='.//media:thumbnail/@url'>
@@ -71,13 +71,13 @@
               </xsl:when>
               <xsl:otherwise>
                 <div class="feedRawContent" desctype="{atom:content/@type | atom03:content/@type }">
-                    <xsl:copy-of select="description | atom:content | atom03:content | rss1:description"  />
+                    <xsl:copy-of select="description | rss1:description | atom:content | atom03:content"  />
                 </div>
               </xsl:otherwise>
             </xsl:choose>
 
             <div class="enclosures">
-                <xsl:for-each select="enclosure | atom:link[@rel='enclosure'] | atom03:link[@rel='enclosure'] | rss1:enclosure">
+                <xsl:for-each select="enclosure | rss1:enclosure | atom:link[@rel='enclosure'] | atom03:link[@rel='enclosure']">
 
                   <div class="enclosure">
                       <img data-src="icons/file.png" class="extImg enclosureIcon" />
