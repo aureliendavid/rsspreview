@@ -42,7 +42,12 @@
 
             <h3>
                 <xsl:choose>
-                  <xsl:when test="link | atom:link/@href | atom03:link/@href | rss1:link">
+                  <xsl:when test="atom:link[@rel='alternate']/@href | atom03:link[@rel='alternate']/@href">
+                    <a href="{atom:link[@rel='alternate']/@href | atom03:link[@rel='alternate']/@href}" target="_blank">
+                        <span class="entrytitle"><xsl:value-of select="atom:title | atom03:title" /></span>
+                    </a>
+                  </xsl:when>
+                  <xsl:when test="link | atom:link/@href | atom:link/@href | atom03:link/@href | rss1:link">
                     <a href="{link | atom:link/@href | atom03:link/@href | rss1:link}" target="_blank">
                         <span class="entrytitle"><xsl:value-of select="title | atom:title | atom03:title | rss1:title" /></span>
                     </a>
