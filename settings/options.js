@@ -9,6 +9,7 @@ function saveOptions(e) {
     doDetect: document.querySelector("#doDetect").checked,
     preventPreview: document.querySelector("#preventPreview").checked,
     fullPreview: document.querySelector("#fullPreview").checked,
+    doAuthor: document.querySelector("#doAuthor").checked,
     enableCss: document.querySelector("#enableCss").checked,
     customCss: document.querySelector("#customCss").value
   });
@@ -25,6 +26,7 @@ function restoreOptions() {
     document.querySelector("#doDetect").checked = result.doDetect;
     document.querySelector("#preventPreview").checked = result.preventPreview;
     document.querySelector("#fullPreview").checked = result.fullPreview;
+    document.querySelector("#doAuthor").checked = result.doAuthor;
     document.querySelector("#enableCss").checked = result.enableCss;
     document.querySelector("#customCss").value = result.customCss;
   }
@@ -40,6 +42,7 @@ function restoreOptions() {
     doDetect: true,
     preventPreview: false,
     fullPreview: false,
+    doAuthor: false,
     enableCss: false,
     customCss: null
   });

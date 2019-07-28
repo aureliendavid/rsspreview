@@ -9,6 +9,7 @@
     exclude-result-prefixes="atom atom03 rdf rss1 media" >
 
     <xsl:param name="fullPreview" />
+    <xsl:param name="doAuthor" />
 
     <xsl:output method="html" indent="yes" encoding="utf-8" />
 
@@ -58,6 +59,10 @@
                 </xsl:choose>
 
                 <div class="lastUpdated"><xsl:value-of select="pubDate | rss1:pubDate | atom:updated | atom03:updated" /></div>
+
+                <xsl:if test="$doAuthor">
+                  <div class="author"><xsl:value-of select="author | rss1:author | atom:*/atom:name | atom03:*/atom03:name" /></div>
+                </xsl:if>
             </h3>
 
             <xsl:if test='.//media:thumbnail/@url'>

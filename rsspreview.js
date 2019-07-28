@@ -19,6 +19,7 @@
     doDetect: true,
     preventPreview: false,
     fullPreview: false,
+    doAuthor: false,
     enableCss: false,
     customCss: null
   };
@@ -49,6 +50,7 @@
     let xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
     xsltProcessor.setParameter(null, 'fullPreview', options.fullPreview);
+    xsltProcessor.setParameter(null, 'doAuthor', options.doAuthor);
     let fragment = xsltProcessor.transformToFragment(xmlin, doc);
     node.appendChild(fragment);
   }
@@ -106,7 +108,7 @@
         tohtml[i].setAttribute('todel', 1);
       } catch (e) {
         console.error(e);
-        console.log(tohtml[i].innerHTML);
+        console.log(tohtml[i]);
       }
 
     }
