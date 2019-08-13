@@ -6,7 +6,8 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rss1="http://purl.org/rss/1.0/"
     xmlns:media="http://search.yahoo.com/mrss/"
-    exclude-result-prefixes="atom atom03 rdf rss1 media" >
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    exclude-result-prefixes="atom atom03 rdf rss1 media dc" >
 
     <xsl:param name="fullPreview" />
     <xsl:param name="doAuthor" />
@@ -61,7 +62,7 @@
                 <div class="lastUpdated"><xsl:value-of select="pubDate | rss1:pubDate | atom:updated | atom03:updated" /></div>
 
                 <xsl:if test="$doAuthor">
-                  <div class="author"><xsl:value-of select="author | rss1:author | atom:*/atom:name | atom03:*/atom03:name" /></div>
+                  <div class="author"><xsl:value-of select="dc:creator | author | rss1:author | atom:*/atom:name | atom03:*/atom03:name" /></div>
                 </xsl:if>
             </h3>
 
