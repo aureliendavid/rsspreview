@@ -336,29 +336,68 @@
   getting.then(onOptions, onError);
 
 
-  function findFeeds() {
-
-    let feeds = {};
-
-    function registerFeeds(feeds) {
-
-      if (Object.keys(feeds).length > 0) {
-
-        function handleResponse(message) {
-        }
-
-        function handleError(error) {
-          //console.log(error);
-        }
-
-        browser.runtime.sendMessage(feeds).then(handleResponse, handleError);
+  function registerFeeds(feeds) {
+    if (Object.keys(feeds).length > 0) {
+      function handleResponse(message) {
       }
+
+      function handleError(error) {
+        //console.log(error);
+      }
+
+      browser.runtime.sendMessage(feeds).then(handleResponse, handleError);
     }
+  }
 
-    var async_send = false;
 
+  function findiTunesPodcastsFeeds() {
+    let match = document.URL.match(/id(\d+)/)
+    if (match) {
+      let feeds = {};
+      let itunesid = match[1];
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', "https://itunes.apple.com/lookup?id="+itunesid+"&entity=podcast");
+
+      xhr.onload = function () {
+        if (xhr.readyState === xhr.DONE) {
+          if (xhr.status === 200) {
+            let res = JSON.parse(xhr.responseText);
+
+            if ("results" in res) {
+              let pod = res["results"][0];
+              let title = pod["collectionName"] || document.title;
+              let url = pod["feedUrl"];
+              if (url) {
+                feeds[url] = title;
+              }
+            }
+          }
+        }
+
+        registerFeeds(feeds);
+      };
+      xhr.send();
+    }
+  }
+
+  function findYouTubeFeeds() {
+    let match = document.URL.match(/channel\/([a-zA-Z0-9]+)/);
+    if (match) {
+      let feeds = {};
+      let channelId = match[1];
+      let url = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+      let title = document.title;
+      feeds[url] = title;
+      registerFeeds(feeds);
+    }
+  }
+
+  // The default function used to find feeds if a domain-specific function doesn't exist.
+  // Parse the document's HTML looking for link tags pointing to the feed URL.
+  function defaultFindFeeds() {
+    let feeds = {};
     document.querySelectorAll("link[rel='alternate']").forEach( (elem) => {
-
       let type_attr = elem.getAttribute('type');
       if (!type_attr) {
         return;
@@ -366,55 +405,28 @@
 
       let type = type_attr.toLowerCase();
       if (type.includes('rss') || type.includes('atom') || type.includes('feed')) {
-
         let title = elem.getAttribute('title');
         let url = elem.href;
 
         if (url) {
-
           feeds[url] = (title ? title : url);
-
         }
       }
     });
-
-    if (document.domain == "itunes.apple.com" || document.domain == "podcasts.apple.com") {
-
-      let match = document.URL.match(/id(\d+)/)
-      if (match) {
-        let itunesid = match[1];
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', "https://itunes.apple.com/lookup?id="+itunesid+"&entity=podcast");
-
-        xhr.onload = function () {
-          if (xhr.readyState === xhr.DONE) {
-            if (xhr.status === 200) {
-              let res = JSON.parse(xhr.responseText);
-
-              if ("results" in res) {
-
-                let pod = res["results"][0];
-                let title =  pod["collectionName"] || document.title;
-                let url = pod["feedUrl"];
-                if (url) {
-                  feeds[url] = title;
-                }
-              }
-            }
-          }
-
-          registerFeeds(feeds);
-        };
-        async_send = true;
-        xhr.send();
-      }
-    }
-
-    if (!async_send)
-      registerFeeds(feeds);
-
+    registerFeeds(feeds);
   }
 
+  const domainFeedFinders = new Map([
+    ["itunes.apple.com", findiTunesPodcastsFeeds],
+    ["podcasts.apple.com", findiTunesPodcastsFeeds],
+    ["www.youtube.com", findYouTubeFeeds],
+  ]);
+
+  function findFeeds() {
+    // Look up a feed detection function based on the domain.
+    // If a domain-specific function doesn't exist, fall back to a default.
+    let finder = domainFeedFinders.get(document.domain) || defaultFindFeeds;
+    finder();
+  }
 
 })();
