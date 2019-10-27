@@ -382,7 +382,7 @@
   }
 
   function findYouTubeFeeds() {
-    let match = document.URL.match(/channel\/([a-zA-Z0-9]+)/);
+    let match = document.URL.match(/channel\/([a-zA-Z0-9_-]+)/);
     if (match) {
       let feeds = {};
       let channelId = match[1];
