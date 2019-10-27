@@ -7,7 +7,8 @@
     xmlns:rss1="http://purl.org/rss/1.0/"
     xmlns:media="http://search.yahoo.com/mrss/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    exclude-result-prefixes="atom atom03 rdf rss1 media dc" >
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    exclude-result-prefixes="atom atom03 rdf rss1 media dc content" >
 
     <xsl:param name="fullPreview" />
     <xsl:param name="doAuthor" />
@@ -69,16 +70,35 @@
             <xsl:if test='.//media:thumbnail/@url'>
                 <img class="mediaThumb" src="{ .//media:thumbnail/@url }" width="{ .//media:thumbnail/@width }" height="{ .//media:thumbnail/@height }" />
             </xsl:if>
+
             <xsl:choose>
-              <xsl:when test="not($fullPreview) and atom:summary | atom03:summary">
-                <div class="feedRawContent" desctype="{atom:summary/@type | atom03:summary/@type }">
-                    <xsl:copy-of select="atom:summary | atom03:summary"  />
-                </div>
+              <xsl:when test="not($fullPreview)">
+                <xsl:choose>
+                  <xsl:when test="description | rss1:description | atom:summary | atom03:summary">
+                    <div class="feedRawContent" desctype="{atom:summary/@type | atom03:summary/@type }">
+                        <xsl:copy-of select="description | rss1:description | atom:summary | atom03:summary"  />
+                    </div>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <div class="feedRawContent" desctype="{atom:content/@type | atom03:content/@type }">
+                        <xsl:copy-of select="content:encoded | rss1:description | atom:content | atom03:content"  />
+                    </div>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:when>
               <xsl:otherwise>
-                <div class="feedRawContent" desctype="{atom:content/@type | atom03:content/@type }">
-                    <xsl:copy-of select="description | rss1:description | atom:content | atom03:content"  />
-                </div>
+                <xsl:choose>
+                  <xsl:when test="content:encoded | rss1:description | atom:content | atom03:content">
+                    <div class="feedRawContent" desctype="{atom:content/@type | atom03:content/@type }">
+                        <xsl:copy-of select="content:encoded | rss1:description | atom:content | atom03:content"  />
+                    </div>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <div class="feedRawContent" desctype="{atom:summary/@type | atom03:summary/@type }">
+                        <xsl:copy-of select="description | rss1:description | atom:summary | atom03:summary"  />
+                    </div>
+                  </xsl:otherwise>
+                </xsl:choose>
               </xsl:otherwise>
             </xsl:choose>
 
