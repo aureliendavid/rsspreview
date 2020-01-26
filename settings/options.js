@@ -10,6 +10,7 @@ function saveOptions(e) {
     preventPreview: document.querySelector("#preventPreview").checked,
     fullPreview: document.querySelector("#fullPreview").checked,
     doAuthor: document.querySelector("#doAuthor").checked,
+    orangeIcon: document.querySelector("#orangeIcon").checked,
     enableCss: document.querySelector("#enableCss").checked,
     customCss: document.querySelector("#customCss").value
   });
@@ -27,6 +28,7 @@ function restoreOptions() {
     document.querySelector("#preventPreview").checked = result.preventPreview;
     document.querySelector("#fullPreview").checked = result.fullPreview;
     document.querySelector("#doAuthor").checked = result.doAuthor;
+    document.querySelector("#orangeIcon").checked = result.orangeIcon;
     document.querySelector("#enableCss").checked = result.enableCss;
     document.querySelector("#customCss").value = result.customCss;
   }
@@ -43,6 +45,7 @@ function restoreOptions() {
     preventPreview: false,
     fullPreview: false,
     doAuthor: false,
+    orangeIcon: false,
     enableCss: false,
     customCss: null
   });
@@ -57,4 +60,3 @@ document.addEventListener("DOMContentLoaded", restoreOptions);
 document.querySelectorAll('.validate').forEach((elem) => {
   elem.addEventListener('change', saveOptions);
 });
-

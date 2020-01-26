@@ -49,14 +49,24 @@ browser.webRequest.onHeadersReceived.addListener(
 
 
 function handleMessage(request, sender, sendResponse) {
+  browser.storage.sync.get({orangeIcon: false}).then(function(options){
 
-  let popup = new URL(browser.runtime.getURL('popup/popup.html'));
-  popup.searchParams.set('feeds', JSON.stringify(request));
+    let popup = new URL(browser.runtime.getURL('popup/popup.html'));
+    popup.searchParams.set('feeds', JSON.stringify(request));
 
-  browser.pageAction.setPopup( {tabId: sender.tab.id, popup: popup.toString() });
-  browser.pageAction.show(sender.tab.id);
+    if (options.orangeIcon) {
+      browser.pageAction.setIcon({tabId: sender.tab.id, path: {
+        "19": "icons/rss-19.png",
+        "38": "icons/rss-38.png"
+        }
+      });
+    }
+    browser.pageAction.setPopup( {tabId: sender.tab.id, popup: popup.toString() });
+    browser.pageAction.show(sender.tab.id);
 
-  //sendResponse({response: "Response from background script to tab " + sender.tab.url , id: sender.tab.id });
+    //sendResponse({response: "Response from background script to tab " + sender.tab.url , id: sender.tab.id });
+
+  });
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
