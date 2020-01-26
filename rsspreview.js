@@ -56,10 +56,7 @@
   }
 
   function getlang() {
-    if (navigator.languages && navigator.languages[0])
-      return navigator.languages[0];
-    else if (navigator.language) return navigator.language;
-    else return null;
+    return browser.i18n.getUILanguage();
   }
 
   function formatsubtitle() {
