@@ -383,7 +383,7 @@
     // It also supports named channels of the form /c/MyChannelName
     // Match on both of these to autodetect channel feeds on either URL
     let idPattern = /channel\/(?<channelId>[a-zA-Z0-9_-]+)/;
-    let namePattern = /c\/[a-zA-Z0-9_-]+/;
+    let namePattern = /(?:c|user)\/[a-zA-Z0-9_-]+/;
     let urlPattern = new RegExp(`${idPattern.source}|${namePattern.source}`);
     if (document.URL.match(urlPattern)) {
       let feeds = {};
