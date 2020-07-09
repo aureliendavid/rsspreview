@@ -382,13 +382,13 @@
     // YouTube's canonical channel URLs look like /channel/AlphaNumericID
     // It also supports named channels of the form /c/MyChannelName
     // Match on both of these to autodetect channel feeds on either URL
-    let idPattern = /channel\/(?<channelId>[a-zA-Z0-9_-]+)/;
+    let idPattern = /channel\/([a-zA-Z0-9_-]+)/;
     let namePattern = /(?:c|user)\/[a-zA-Z0-9_-]+/;
     let urlPattern = new RegExp(`${idPattern.source}|${namePattern.source}`);
     if (document.URL.match(urlPattern)) {
       let feeds = {};
       let canonicalUrl = document.querySelector("link[rel='canonical']").href;
-      let channelId = canonicalUrl.match(idPattern).groups.channelId;
+      let channelId = canonicalUrl.match(idPattern)[1];
       let url = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
       let title = document.title;
       feeds[url] = title;
