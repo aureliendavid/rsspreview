@@ -28,6 +28,7 @@
             <xsl:value-of select="title | rss1:title | atom:title | atom03:title" />
             </a>
           </h1>
+          <div id="feedLastUpdate" class="lastUpdated"><xsl:value-of select="lastBuildDate | rss1:lastBuildDate | atom:updated | atom03:updated" /></div>
           <h2 id="feedSubtitleRaw" ><xsl:value-of select="description | rss1:description | atom:subtitle | atom03:subtitle" /></h2>
         </div>
       </div>

@@ -153,6 +153,16 @@ img {
   display: none;
 }
 
+#feedSubtitleText {
+  margin-top: 5px;
+}
+
+#feedLastUpdate {
+  color: GrayText;
+  font-size: 87%;
+
+}
+
 .author {
   font-style: italic;
   font-weight: normal;
