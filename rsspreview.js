@@ -201,6 +201,11 @@
 
       ed[i].innerText = dstr;
     }
+
+    let lu = el.getElementById('feedLastUpdate');
+    if (lu && lu.innerText.trim() != "") {
+      lu.innerText = "Last updated: " + lu.innerText;
+    }
   }
 
   function extensionimages(el = document) {
