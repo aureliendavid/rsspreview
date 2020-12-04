@@ -21,7 +21,8 @@
     fullPreview: false,
     doAuthor: false,
     enableCss: false,
-    customCss: null
+    customCss: null,
+    newTab: true
   };
 
   let xml_parser = new XMLSerializer();

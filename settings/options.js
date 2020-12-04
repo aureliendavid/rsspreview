@@ -12,13 +12,13 @@ function saveOptions(e) {
     doAuthor: document.querySelector("#doAuthor").checked,
     orangeIcon: document.querySelector("#orangeIcon").checked,
     enableCss: document.querySelector("#enableCss").checked,
-    customCss: document.querySelector("#customCss").value
+    customCss: document.querySelector("#customCss").value,
+    newTab: document.querySelector("#newTab").checked
   });
 }
 
 
 function restoreOptions() {
-
 
   function onResult(result) {
     document.querySelector("#doThumb").checked = result.doThumb;
@@ -31,6 +31,7 @@ function restoreOptions() {
     document.querySelector("#orangeIcon").checked = result.orangeIcon;
     document.querySelector("#enableCss").checked = result.enableCss;
     document.querySelector("#customCss").value = result.customCss;
+    document.querySelector("#newTab").checked = result.newTab;
   }
 
   function onError(error) {
@@ -47,7 +48,8 @@ function restoreOptions() {
     doAuthor: false,
     orangeIcon: false,
     enableCss: false,
-    customCss: null
+    customCss: null,
+    newTab: true
   });
   getting.then(onResult, onError);
 

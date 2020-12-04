@@ -1,3 +1,18 @@
+
+var options = {
+    newTab: true,
+};
+
+function onOptions(opts) {
+  options = opts;
+}
+
+function onError(error) {
+  console.log(`Error on get options: ${error}`);
+}
+
+browser.storage.sync.get(options).then(onOptions, onError);
+
 document.addEventListener("DOMContentLoaded", function(event) {
 
 
@@ -24,16 +39,24 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   document.querySelectorAll(".panel-list-item").forEach( (elem) => {
 
+    function onUpdated(tab) {
+    }
+
+    function onError(error) {
+    }
+
     elem.addEventListener('click', (event) => {
 
       let url = elem.getAttribute("data-href");
-      if (url)
-        browser.tabs.create({url: url});
-
+      if (url) {
+        if (options.newTab)
+          browser.tabs.create({url: url});
+        else
+          browser.tabs.update({url: url}).then(onUpdated, onError);
+      }
 
     });
 
   });
 
 });
-
