@@ -24,7 +24,10 @@ function detectFeed(event) {
     for (let i = 0; i < event.responseHeaders.length; i++) {
       if (event.responseHeaders[i].name.toLowerCase() == 'cache-control') {
         event.responseHeaders.splice(i, 1);
-        break;
+      }
+      else if (event.responseHeaders[i].name.toLowerCase() == 'content-security-policy') {
+        if (enableCss)
+          event.responseHeaders[i].value = patchCSP(event.responseHeaders[i].value);
       }
     }
 
@@ -40,6 +43,10 @@ function detectFeed(event) {
 }
 
 const browser = window.browser || window.chrome;
+let enableCss = false;
+browser.storage.sync.get({enableCss: false}).then(function(options) {
+  enableCss = options.enableCss;
+})
 
 browser.webRequest.onHeadersReceived.addListener(
   detectFeed,
@@ -70,3 +77,37 @@ function handleMessage(request, sender, sendResponse) {
 }
 
 browser.runtime.onMessage.addListener(handleMessage);
+
+
+function parseCSP(csp) {
+  let res = {};
+
+  let directives = csp.split(";");
+  for (let directive of directives) {
+    let kw = directive.trim().split(/\s+/g);
+    let key = kw.shift();
+    let values = res[key] || [];
+    res[key] = values.concat(kw);
+  }
+
+  return res;
+}
+
+function patchCSP(csp) {
+  let parsed_csp = parseCSP(csp);
+
+  let stylesrc = parsed_csp['style-src'] || [];
+  if (! stylesrc.includes("'unsafe-inline'") ) {
+    stylesrc.push("'unsafe-inline'");
+    parsed_csp['style-src'] = stylesrc;
+
+    let new_csp = "";
+
+    for (let kw in parsed_csp) {
+      new_csp += kw + " " + parsed_csp[kw].join(" ") + "; ";
+    }
+    new_csp = new_csp.substring(0, new_csp.length-2);
+    return new_csp;
+  }
+  return csp;
+}
