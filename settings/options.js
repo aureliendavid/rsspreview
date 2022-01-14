@@ -2,7 +2,7 @@
 function saveOptions(e) {
   e.preventDefault();
 
-  browser.storage.sync.set({
+  let options = {
     doThumb: document.querySelector("#doThumb").checked,
     doMaxWidth: document.querySelector("#doMaxWidth").checked,
     valMaxWidth: document.querySelector("#valMaxWidth").value,
@@ -12,9 +12,14 @@ function saveOptions(e) {
     doAuthor: document.querySelector("#doAuthor").checked,
     orangeIcon: document.querySelector("#orangeIcon").checked,
     enableCss: document.querySelector("#enableCss").checked,
+    bypassCSP: document.querySelector("#bypassCSP").checked,
     customCss: document.querySelector("#customCss").value,
     newTab: document.querySelector("#newTab").checked
-  });
+  };
+
+  browser.storage.sync.set(options);
+  localStorage.setItem('options', JSON.stringify(options));
+
 }
 
 
@@ -30,8 +35,11 @@ function restoreOptions() {
     document.querySelector("#doAuthor").checked = result.doAuthor;
     document.querySelector("#orangeIcon").checked = result.orangeIcon;
     document.querySelector("#enableCss").checked = result.enableCss;
+    document.querySelector("#bypassCSP").checked = result.bypassCSP;
     document.querySelector("#customCss").value = result.customCss;
     document.querySelector("#newTab").checked = result.newTab;
+
+    localStorage.setItem('options', JSON.stringify(result));
   }
 
   function onError(error) {
@@ -48,6 +56,7 @@ function restoreOptions() {
     doAuthor: false,
     orangeIcon: false,
     enableCss: false,
+    bypassCSP: false,
     customCss: null,
     newTab: true
   });

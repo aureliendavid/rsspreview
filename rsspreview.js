@@ -21,6 +21,7 @@
     fullPreview: false,
     doAuthor: false,
     enableCss: false,
+    bypassCSP: false,
     customCss: null,
     newTab: true
   };

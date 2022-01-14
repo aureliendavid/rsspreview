@@ -26,8 +26,16 @@ function detectFeed(event) {
         event.responseHeaders.splice(i, 1);
       }
       else if (event.responseHeaders[i].name.toLowerCase() == 'content-security-policy') {
-        if (enableCss)
-          event.responseHeaders[i].value = patchCSP(event.responseHeaders[i].value);
+
+        try {
+          let options = JSON.parse(localStorage.getItem('options'));
+
+          if (options.enableCss && options.bypassCSP)
+            event.responseHeaders[i].value = patchCSP(event.responseHeaders[i].value);
+        }
+        catch(e) {
+          console.log(e);
+        }
       }
     }
 
@@ -40,13 +48,11 @@ function detectFeed(event) {
   }
 
   return { responseHeaders: event.responseHeaders };
+
+
 }
 
 const browser = window.browser || window.chrome;
-let enableCss = false;
-browser.storage.sync.get({enableCss: false}).then(function(options) {
-  enableCss = options.enableCss;
-})
 
 browser.webRequest.onHeadersReceived.addListener(
   detectFeed,
