@@ -214,7 +214,7 @@
     let extimgs = el.getElementsByClassName('extImg');
 
     for (let i = 0; i < extimgs.length; i++)
-      extimgs[i].src = chrome.extension.getURL(
+      extimgs[i].src = chrome.runtime.getURL(
         extimgs[i].attributes['data-src'].nodeValue
       );
   }
@@ -243,7 +243,7 @@
 
     let css = doc.createElement('link');
     css.setAttribute('rel', 'stylesheet');
-    css.setAttribute('href', chrome.extension.getURL('preview.css'));
+    css.setAttribute('href', chrome.runtime.getURL('preview.css'));
     doc.head.appendChild(css);
 
     if (options.enableCss && options.customCss) {
@@ -285,7 +285,7 @@
     let feed_url = window.location.href;
     let preview = makepreviewhtml();
 
-    xhrdoc(chrome.extension.getURL('rss.xsl'), 'xml', xsl_xml => {
+    xhrdoc(chrome.runtime.getURL('rss.xsl'), 'xml', xsl_xml => {
       applyxsl(feedNode, xsl_xml, preview.getElementById('feedBody'), preview);
 
       // replace the content with the preview document
