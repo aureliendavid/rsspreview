@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   const feedList = document.getElementById('feedList');
 
   const url = new URL(location.href);
+  // `+` converts the string to an number
+  const tabId = +url.searchParams.get('tabId');
   const feeds = JSON.parse(url.searchParams.get('feeds'));
 
   for (feed_url in feeds) {
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
       let url = elem.getAttribute("data-href");
       if (url) {
         if (options.newTab)
-          browser.tabs.create({url: url});
+          browser.tabs.create({url: url, openerTabId: tabId});
         else
           browser.tabs.update({url: url}).then(onUpdated, onError);
       }

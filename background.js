@@ -65,6 +65,7 @@ function handleMessage(request, sender, sendResponse) {
   browser.storage.sync.get({orangeIcon: false}).then(function(options){
 
     let popup = new URL(browser.runtime.getURL('popup/popup.html'));
+    popup.searchParams.set('tabId', sender.tab.id.toString());
     popup.searchParams.set('feeds', JSON.stringify(request));
 
     if (options.orangeIcon) {
