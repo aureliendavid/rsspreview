@@ -388,11 +388,13 @@
   function findYouTubeFeeds() {
     // YouTube's canonical channel URLs look like /channel/AlphaNumericID
     // It also supports named channels of the form /c/MyChannelName
+    // and handle links of the form /@MyChannelHandle.
     // Match also on '%' to handle non-latin character codes
     // Match on both of these to autodetect channel feeds on either URL
     let idPattern = /channel\/([a-zA-Z0-9%_-]+)/;
     let namePattern = /(?:c|user)\/[a-zA-Z0-9%_-]+/;
-    let urlPattern = new RegExp(`${idPattern.source}|${namePattern.source}`);
+    let handlePattern = /@[a-zA-Z0-9%_-]+/;
+    let urlPattern = new RegExp(`${idPattern.source}|${namePattern.source}|${handlePattern.source}`);
     if (document.URL.match(urlPattern)) {
       let feeds = {};
       let canonicalUrl = document.querySelector("link[rel='canonical']").href;
