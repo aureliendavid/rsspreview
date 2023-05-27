@@ -9,9 +9,9 @@ function detectFeed(event) {
 
   for (let header of event.responseHeaders) {
     if (header.name.toLowerCase() == 'content-type') {
-      if (header.value.match(/application\/(rss|atom)\+xml/)) {
+      if (header.value.match(/application\/((x-)?rss|atom)\+xml/)) {
         header.value = header.value.replace(
-          /application\/(rss|atom)\+xml/,
+          /application\/((x-)?rss|atom)\+xml/,
           'text/xml'
         );
         isfeed = true;
