@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "RSSPreview",
-  "version": "3.19",
+  "version": "3.20",
   "author": "Aurelien David",
   "homepage_url": "https://github.com/aureliendavid/rsspreview",
 
@@ -45,7 +45,7 @@
     "default_title": "Feeds in page"
   },
 
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "{7799824a-30fe-4c67-8b3e-7094ea203c94}"
     }
