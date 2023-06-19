@@ -105,8 +105,14 @@ function patchCSP(csp) {
 
   let stylesrc = parsed_csp['style-src'] || [];
   if (! stylesrc.includes("'unsafe-inline'") ) {
-    stylesrc.push("'unsafe-inline'");
-    parsed_csp['style-src'] = stylesrc;
+    let newstylesrc = ["'unsafe-inline'"];
+
+    for (let src of stylesrc) {
+      if (!src.startsWith("'nonce") && !src.startsWith('sha'))
+        newstylesrc.push(src);
+    }
+
+    parsed_csp['style-src'] = newstylesrc;
 
     let new_csp = "";
 
