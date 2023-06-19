@@ -21,9 +21,12 @@ function detectFeed(event) {
   }
 
   if (isfeed) {
+
+    var cache_idx = null;
+
     for (let i = 0; i < event.responseHeaders.length; i++) {
       if (event.responseHeaders[i].name.toLowerCase() == 'cache-control') {
-        event.responseHeaders.splice(i, 1);
+        cache_idx = i;
       }
       else if (event.responseHeaders[i].name.toLowerCase() == 'content-security-policy') {
 
@@ -37,6 +40,10 @@ function detectFeed(event) {
           console.log(e);
         }
       }
+    }
+
+    if (cache_idx) {
+      event.responseHeaders.splice(cache_idx, 1);
     }
 
     // don't cache requests we modified
