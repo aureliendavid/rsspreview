@@ -169,12 +169,14 @@
       //basically removes html content if there is some
       //only do it if there's a tag to avoid doing it when text titles cointain a '&'
       //(which can be caught but still displays an error in console, which is annoying)
-      if (et[i].innerText.indexOf('<') >= 0) {
+      if (et[i].innerText.indexOf('<') >= 0 || et[i].innerText.indexOf('&amp;')) {
+        console.log(et[i].innerText);
         let tmp = document.createElement('span');
         try {
           tmp.innerHTML = et[i].innerText;
           et[i].innerText = tmp.textContent;
         } catch (e) {
+          // if not parsable, display as text
           console.error(e);
           console.log(et[i].innerText);
         }
