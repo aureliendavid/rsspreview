@@ -169,3 +169,27 @@ img {
   padding-left: 5px;
   padding-top: 3px;
 }
+
+@media(prefers-color-scheme: dark){
+  html {
+    background-color: rgb(28, 27, 34);
+    color: white;
+  }
+  h1 {
+    border-color: rgba(249,249,250,0.2);
+  }
+  #feedBody {
+    border-color: rgba(249,249,250,0.2);
+    background-color: rgb(35, 34, 43);
+  }
+  #feedBody a {
+    color: rgb(0,221,255);
+  }
+  .link {
+    color: rgb(0,221,255);
+  }
+  .enclosures {
+    border-color: rgba(249,249,250,0.2);
+    background-color: rgb(28, 27, 34);
+  }
+}
