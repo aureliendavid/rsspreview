@@ -1,24 +1,10 @@
 
-var options = {
-    newTab: true,
-};
-
 var android = false;
 
 browser.runtime.getPlatformInfo().then((info) => {
   android = info.os == "android"
 });
 
-
-function onOptions(opts) {
-  options = opts;
-}
-
-function onError(error) {
-  console.log(`Error on get options: ${error}`);
-}
-
-browser.storage.sync.get(options).then(onOptions, onError);
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
@@ -29,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // `+` converts the string to an number
   const tabId = +url.searchParams.get('tabId');
   const feeds = JSON.parse(url.searchParams.get('feeds'));
+
+  browser.runtime.getPlatformInfo().then((info) => {
+  android = info.os == "android";
 
   for (feed_url in feeds) {
     if (feeds.hasOwnProperty(feed_url)) {
@@ -43,17 +32,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
       li.appendChild(a);
 
-      browser.runtime.getPlatformInfo().then((info) => {
-        android = info.os == "android"
-
-        if (android)
-          li.classList.add("android-feed-btn");
-      });
-
+      if (android)
+        li.classList.add("android-feed-btn");
 
       feedList.appendChild(li);
     }
   }
+
+
+
+
+  browser.storage.sync.get({newTab: !android}).then(function(options) {
 
   document.querySelectorAll(".panel-list-item").forEach( (elem) => {
 
@@ -82,6 +71,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     });
 
-  });
+  }); // end forall
+
+  }); // end options
+
+  }); // and getplatform
 
 });
