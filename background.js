@@ -69,7 +69,11 @@ browser.webRequest.onHeadersReceived.addListener(
 
 
 function handleMessage(request, sender, sendResponse) {
-  browser.storage.sync.get({orangeIcon: false}).then(function(options){
+
+  browser.runtime.getPlatformInfo().then((info) => {
+
+  let android = info.os == "android"
+  browser.storage.sync.get({orangeIcon: android}).then(function(options){
 
     let popup = new URL(browser.runtime.getURL('popup/popup.html'));
     popup.searchParams.set('tabId', sender.tab.id.toString());
@@ -87,6 +91,7 @@ function handleMessage(request, sender, sendResponse) {
 
     //sendResponse({response: "Response from background script to tab " + sender.tab.url , id: sender.tab.id });
 
+  });
   });
 }
 

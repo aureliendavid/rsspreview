@@ -1,4 +1,10 @@
 
+var android = false;
+
+browser.runtime.getPlatformInfo().then((info) => {
+  android = info.os == "android"
+});
+
 function saveOptions(e) {
   e.preventDefault();
 
@@ -24,6 +30,10 @@ function saveOptions(e) {
 
 
 function restoreOptions() {
+
+  browser.runtime.getPlatformInfo().then((info) => {
+    android = info.os == "android"
+
 
   function onResult(result) {
     document.querySelector("#doThumb").checked = result.doThumb;
@@ -54,13 +64,15 @@ function restoreOptions() {
     preventPreview: false,
     fullPreview: false,
     doAuthor: false,
-    orangeIcon: false,
+    orangeIcon: android,
     enableCss: false,
     bypassCSP: false,
     customCss: null,
-    newTab: true
+    newTab: !android
   });
   getting.then(onResult, onError);
+
+  });
 
 }
 

@@ -3,6 +3,13 @@ var options = {
     newTab: true,
 };
 
+var android = false;
+
+browser.runtime.getPlatformInfo().then((info) => {
+  android = info.os == "android"
+});
+
+
 function onOptions(opts) {
   options = opts;
 }
@@ -35,6 +42,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
       a.innerText = feeds[feed_url];
 
       li.appendChild(a);
+
+      browser.runtime.getPlatformInfo().then((info) => {
+        android = info.os == "android"
+
+        if (android)
+          li.classList.add("android-feed-btn");
+      });
+
+
       feedList.appendChild(li);
     }
   }
@@ -51,11 +67,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
       let url = elem.getAttribute("data-href");
       if (url) {
-        if (options.newTab)
-          browser.tabs.create({url: url, openerTabId: tabId});
+        if (options.newTab) {
+          var params = { url: url } ;
+          if (!android) {
+            params.openerTabId = tabId ;
+          }
+          browser.tabs.create(params);
+        }
         else
           browser.tabs.update({url: url}).then(onUpdated, onError);
       }
+      if (android)
+        window.close();
 
     });
 
