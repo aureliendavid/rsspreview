@@ -16,6 +16,11 @@ function detectFeed(event) {
         );
         isfeed = true;
       }
+      else if (header.value.toLowerCase() == 'text/xml' || header.value.toLowerCase() == 'application/xml' ) {
+        if (event.url.endsWith(".rss") || event.url.endsWith(".rss.xml") || event.url.endsWith(".atom") || event.url.endsWith(".atom.xml")) {
+          isfeed = true;
+        }
+      }
       break;
     }
   }
