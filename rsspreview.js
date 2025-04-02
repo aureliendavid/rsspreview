@@ -76,7 +76,7 @@
       feed_desc.parentNode.removeChild(feed_desc);
     } catch (e) {
       console.error(e);
-      console.log(feed_desc.innerText);
+      //console.log(feed_desc.innerText);
     }
   }
 
