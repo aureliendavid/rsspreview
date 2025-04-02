@@ -20,7 +20,7 @@
 
       <div id="feedTitle">
         <a id="feedTitleLink">
-          <img id="feedTitleImage" src="{image/url | rss1:image/rss1:url | atom:logo | atom03:logo }" />
+          <img id="feedTitleImage" src="{image/url | rss1:image/rss1:url | atom:logo | atom:icon | atom03:logo }" />
         </a>
         <div id="feedTitleContainer">
           <h1 id="feedTitleText" >
