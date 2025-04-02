@@ -76,7 +76,6 @@
       feed_desc.parentNode.removeChild(feed_desc);
     } catch (e) {
       console.error(e);
-      //console.log(feed_desc.innerText);
     }
   }
 
@@ -258,13 +257,13 @@
   }
 
   function detect() {
-    let rootNode = document.getRootNode().documentElement;
+    let rootNode = document.getRootNode();
 
     // for chrome
     let d = document.getElementById('webkit-xml-viewer-source-xml');
     if (d && d.firstChild) rootNode = d.firstChild;
 
-    const rootName = rootNode.nodeName.toLowerCase();
+    const rootName = rootNode.documentElement.nodeName.toLowerCase();
 
     let isRSS1 = false;
 
