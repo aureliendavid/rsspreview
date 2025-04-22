@@ -169,7 +169,7 @@
       //only do it if there's a tag to avoid doing it when text titles cointain a '&'
       //(which can be caught but still displays an error in console, which is annoying)
       if (et[i].innerText.indexOf('<') >= 0 || et[i].innerText.indexOf('&amp;')) {
-        console.log(et[i].innerText);
+
         let tmp = document.createElement('span');
         try {
           tmp.innerHTML = et[i].innerText;
@@ -267,9 +267,12 @@
 
     let isRSS1 = false;
 
-    if (rootName == 'rdf' || rootName == 'rdf:rdf')
-      if (rootNode.attributes['xmlns'])
-        isRSS1 = rootNode.attributes['xmlns'].nodeValue.search('rss') > 0;
+    if (rootName == 'rdf' || rootName == 'rdf:rdf') {
+      if (rootNode.documentElement.attributes['xmlns']) {
+        isRSS1 = rootNode.documentElement.attributes['xmlns'].nodeValue.search('rss') > 0;
+      }
+
+    }
 
     if (
       rootName == 'rss' ||
