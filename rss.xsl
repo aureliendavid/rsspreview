@@ -61,7 +61,7 @@
                   </xsl:otherwise>
                 </xsl:choose>
 
-                <div class="lastUpdated"><xsl:value-of select="*[local-name() = 'pubDate'] | atom:updated | atom03:updated | dc:date" /></div>
+                <div class="lastUpdated"><xsl:value-of select="*[local-name() = 'pubDate'] | atom:updated | atom:published[not(../atom:updated)] | atom03:updated | dc:date" /></div>
 
                 <xsl:if test="$doAuthor">
                   <div class="author"><xsl:value-of select="dc:creator | *[local-name() = 'author'] | atom:*/atom:name | atom03:*/atom03:name" /></div>

@@ -20,7 +20,8 @@ function saveOptions(e) {
     enableCss: document.querySelector("#enableCss").checked,
     bypassCSP: document.querySelector("#bypassCSP").checked,
     customCss: document.querySelector("#customCss").value,
-    newTab: document.querySelector("#newTab").checked
+    newTab: document.querySelector("#newTab").checked,
+    localeDate: document.querySelector("#localeDate").checked
   };
 
   browser.storage.sync.set(options);
@@ -48,6 +49,7 @@ function restoreOptions() {
     document.querySelector("#bypassCSP").checked = result.bypassCSP;
     document.querySelector("#customCss").value = result.customCss;
     document.querySelector("#newTab").checked = result.newTab;
+    document.querySelector("#localeDate").checked = result.localeDate;
 
     localStorage.setItem('options', JSON.stringify(result));
   }
@@ -68,7 +70,8 @@ function restoreOptions() {
     enableCss: false,
     bypassCSP: false,
     customCss: null,
-    newTab: !android
+    newTab: !android,
+    localeDate: true
   });
   getting.then(onResult, onError);
 

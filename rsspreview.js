@@ -23,7 +23,8 @@
     enableCss: false,
     bypassCSP: false,
     customCss: null,
-    newTab: true
+    newTab: true,
+    localeDate: true
   };
 
   let xml_parser = new XMLSerializer();
@@ -184,15 +185,8 @@
   }
 
   function formatdates(el = document) {
-    let lang = getlang();
+    let lang = options.localeDate ? getlang() : "sv-SE";
     if (!lang) return;
-
-    let opts = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
 
     let ed = el.getElementsByClassName('lastUpdated');
     for (let i = 0; i < ed.length; i++) {
@@ -200,7 +194,7 @@
       if (isNaN(d)) continue;
 
       let dstr =
-        d.toLocaleDateString(lang, opts) + ' ' + d.toLocaleTimeString(lang);
+        d.toLocaleString(lang)
 
       ed[i].innerText = dstr;
     }
