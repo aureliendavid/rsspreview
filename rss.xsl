@@ -46,14 +46,14 @@
 
             <h3>
                 <xsl:choose>
-                  <xsl:when test="atom:link[@rel='alternate']/@href | atom03:link[@rel='alternate']/@href">
-                    <a href="{atom:link[@rel='alternate']/@href | atom03:link[@rel='alternate']/@href}" target="_blank">
+                  <xsl:when test="atom:link[not(@rel) or @rel='alternate']/@href | atom03:link[not(@rel) or @rel='alternate']/@href">
+                    <a href="{atom:link[not(@rel) or @rel='alternate']/@href | atom03:link[not(@rel) or @rel='alternate']/@href}" target="_blank">
                         <span class="entrytitle"><xsl:value-of select="atom:title | atom03:title" /></span>
                     </a>
                   </xsl:when>
-                  <xsl:when test="*[local-name() = 'link'] | atom:link/@href | atom03:link/@href">
-                    <a href="{*[local-name() = 'link'] | atom:link/@href | atom03:link/@href}" target="_blank">
-                        <span class="entrytitle"><xsl:value-of select="*[local-name() = 'title'] | atom:title | atom03:title" /></span>
+                  <xsl:when test="*[local-name() = 'link']">
+                    <a href="{*[local-name() = 'link']}" target="_blank">
+                        <span class="entrytitle"><xsl:value-of select="*[local-name() = 'title']" /></span>
                     </a>
                   </xsl:when>
                   <xsl:otherwise>
