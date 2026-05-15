@@ -10,3 +10,20 @@ Additional features:
 * feed detection and address bar button
 * detect feeds from itunes podcast pages
 * custom css support
+
+## Integration Tests
+
+The integration tests require installing packages via `npm` and the Firefox directory in your PATH.
+
+Install test dependencies and run:
+
+```bash
+npm install
+npm test
+```
+
+Alternately, run in headless mode:
+
+```bash
+HEADLESS=1 npm test
+```
