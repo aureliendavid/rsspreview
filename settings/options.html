@@ -1,39 +1,82 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta charset="utf-8">
-  </head>
 
-  <body>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: sans-serif;
+      padding: 10px;
+    }
 
-    <label class="setting browser-style"><input type="checkbox" id="doDetect" class="validate" > Enable feed detection</label>
-    <hr />
-    <label class="setting browser-style"><input type="checkbox" id="newTab" class="validate" > Open feed in new tab</label>
-    <hr />
-    <label class="setting browser-style"><input type="checkbox" id="preventPreview" class="validate" > Display raw xml instead of preview page</label>
-    <hr />
-    <label class="setting browser-style"><input type="checkbox" id="fullPreview" class="validate" > Display full articles even when summaries are present</label>
-    <hr />
-    <label class="setting browser-style"><input type="checkbox" id="doAuthor" class="validate" > Display entry author</label>
-    <hr />
-    <label class="setting browser-style"><input type="checkbox" id="orangeIcon" class="validate" > Use color icon in address bar</label>
-    <hr />
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #2a2a2e;
+        color: #f9f9fa;
+      }
 
-    <label class="setting browser-style"><input type="checkbox" id="doThumb" class="validate" > Display media:thumbnail images</label>
+      textarea {
+        background-color: #42414d;
+        color: #f9f9fa;
+        border: 1px solid #5b5b66;
+      }
 
-    <label class="setting browser-style">
-      <input type="checkbox" id="doMaxWidth" class="validate" > Set max-width for images at
-      <input type="text" id="valMaxWidth" class="validate" >
-    </label>
-    <hr />
+      input[type="checkbox"] {
+        accent-color: #0a84ff;
+      }
 
-    <label class="setting browser-style"><input type="checkbox" id="enableCss" class="validate" > Enable custom CSS:</label><br />
-    <textarea class="setting browser-style validate" id="customCss" rows="7" cols="50" style="font-family: monospace;"></textarea>
-    <label class="setting browser-style"><input type="checkbox" id="bypassCSP" class="validate" > Bypass CSP header when needed</label><br />
+      input[type="text"] {
+        background-color: #42414d;
+        color: #f9f9fa;
+        border: 1px solid #5b5b66;
+      }
+    }
+  </style>
+</head>
 
-    <script src="options.js"></script>
+<body>
 
-  </body>
+  <label class="setting browser-style"><input type="checkbox" id="doDetect" class="validate"> Enable feed
+    detection</label>
+  <hr />
+  <label class="setting browser-style"><input type="checkbox" id="newTab" class="validate"> Open feed in new tab</label>
+  <hr />
+  <label class="setting browser-style"><input type="checkbox" id="preventPreview" class="validate"> Display raw xml
+    instead of preview page</label>
+  <hr />
+  <label class="setting browser-style"><input type="checkbox" id="fullPreview" class="validate"> Display full articles
+    even when summaries are present</label>
+  <hr />
+  <label class="setting browser-style"><input type="checkbox" id="doAuthor" class="validate"> Display entry
+    author</label>
+  <hr />
+  <label class="setting browser-style"><input type="checkbox" id="darkTheme" class="validate"> Enable dark theme</label>
+  <hr />
+  <label class="setting browser-style"><input type="checkbox" id="orangeIcon" class="validate"> Use color icon in
+    address bar</label>
+  <hr />
+
+  <label class="setting browser-style"><input type="checkbox" id="doThumb" class="validate"> Display media:thumbnail
+    images</label>
+
+  <label class="setting browser-style">
+    <input type="checkbox" id="doMaxWidth" class="validate"> Set max-width for images at
+    <input type="text" id="valMaxWidth" class="validate">
+  </label>
+  <hr />
+
+  <label class="setting browser-style"><input type="checkbox" id="enableCss" class="validate"> Enable custom
+    CSS:</label><br />
+  <textarea class="setting browser-style validate" id="customCss" rows="7" cols="50"
+    style="font-family: monospace;"></textarea>
+  <label class="setting browser-style"><input type="checkbox" id="bypassCSP" class="validate"> Bypass CSP header when
+    needed</label><br />
+
+  <script src="options.js"></script>
+
+</body>
 
 </html>

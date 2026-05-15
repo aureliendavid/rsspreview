@@ -1,11 +1,17 @@
 html {
-  font: 3mm tahoma,arial,helvetica,sans-serif;
+  font:
+    3mm tahoma,
+    arial,
+    helvetica,
+    sans-serif;
   background-color: rgb(240, 240, 240);
   color: rgb(0, 0, 0);
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -18,7 +24,7 @@ body {
 h1 {
   font-size: 160%;
   border-bottom: 2px solid ThreeDLightShadow;
-  margin: 0 0 .2em 0;
+  margin: 0 0 0.2em 0;
 }
 
 h1 a {
@@ -34,7 +40,7 @@ h2 {
   color: GrayText;
   font-size: 110%;
   font-weight: normal;
-  margin: 0 0 .6em 0;
+  margin: 0 0 0.6em 0;
 }
 
 a[href] img {
@@ -46,13 +52,13 @@ pre {
   word-break: break-all;
 }
 
-
 code {
   overflow: auto;
   white-space: inherit;
 }
 
-code > pre, pre > code {
+code > pre,
+pre > code {
   display: block;
   overflow: auto;
   white-space: pre;
@@ -72,7 +78,7 @@ img {
 
 #feedTitleLink {
   float: right;
-  margin-inline-start: .6em;
+  margin-inline-start: 0.6em;
   margin-inline-end: 0;
   margin-top: 0;
   margin-bottom: 0;
@@ -80,13 +86,13 @@ img {
 
 #feedTitleContainer {
   margin-inline-start: 0;
-  margin-inline-end: .6em;
+  margin-inline-end: 0.6em;
   margin-top: 0;
   margin-bottom: 0;
 }
 
 #feedTitleImage {
-  margin-inline-start: .6em;
+  margin-inline-start: 0.6em;
   margin-inline-end: 0;
   margin-top: 0;
   margin-bottom: 0;
@@ -99,13 +105,13 @@ img {
 }
 
 .link {
-  color: #0000FF;
+  color: #0000ff;
   text-decoration: underline;
   cursor: pointer;
 }
 
 .link:hover:active {
-  color: #FF0000;
+  color: #ff0000;
 }
 
 .lastUpdated {
@@ -160,7 +166,6 @@ img {
 #feedLastUpdate {
   color: GrayText;
   font-size: 87%;
-
 }
 
 .author {
@@ -170,14 +175,10 @@ img {
   padding-top: 3px;
 }
 
-
-
-
-
 /**
-* browser style classes not present on android and might be deprecated at some point
-* (here as reference for now)
-*/
+ * browser style classes not present on android and might be deprecated at some point
+ * (here as reference for now)
+ */
 
 /*
 .panel-section {
@@ -256,3 +257,48 @@ img {
 .panel-section-list .panel-section-separator {
   margin: 4px 0;
 } */
+
+/* Dark theme overrides */
+html.dark {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  scrollbar-color: #444 #1a1a1a;
+}
+
+html.dark body {
+  background-color: #1a1a1a;
+}
+
+html.dark h1 {
+  border-bottom: 2px solid #444;
+}
+
+html.dark h2 {
+  color: #aaa;
+}
+
+html.dark #feedBody {
+  background-color: #242424;
+  border: 1px solid #444;
+  color: #ddd;
+}
+
+html.dark .link,
+html.dark a {
+  color: #66b3ff;
+}
+
+html.dark .link:hover:active,
+html.dark a:hover:active {
+  color: #ff6666;
+}
+
+html.dark .enclosures {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+}
+
+html.dark #feedLastUpdate,
+html.dark .lastUpdated {
+  color: #999;
+}

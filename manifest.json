@@ -1,5 +1,4 @@
 {
-
   "manifest_version": 2,
   "name": "RSSPreview",
   "version": "3.34",
@@ -7,7 +6,6 @@
   "homepage_url": "https://github.com/aureliendavid/rsspreview",
 
   "description": "Preview RSS feeds in browser",
-
 
   "icons": {
     "32": "icons/rss-32.png",
@@ -18,9 +16,8 @@
   },
 
   "background": {
-      "scripts": ["background.js"]
+    "scripts": ["background.js"]
   },
-
 
   "content_scripts": [
     {
@@ -30,7 +27,6 @@
   ],
 
   "web_accessible_resources": ["preview.css", "rss.xsl", "icons/*.png"],
-
 
   "options_ui": {
     "page": "settings/options.html"
@@ -54,6 +50,11 @@
     }
   },
 
-  "permissions": ["<all_urls>", "webRequest", "webRequestBlocking", "storage", "tabs"]
-
+  "permissions": [
+    "<all_urls>",
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "tabs"
+  ]
 }
