@@ -11,6 +11,11 @@
 
   window.hasRun = true;
 
+  // Detect system theme for the initial default
+  const systemDarkDefault = window.matchMedia(
+    "(prefers-color-scheme: dark)",
+  ).matches;
+
   // defaults
   var options = {
     doThumb: false,
@@ -20,6 +25,7 @@
     preventPreview: false,
     fullPreview: false,
     doAuthor: false,
+    darkTheme: systemDarkDefault,
     enableCss: false,
     bypassCSP: false,
     customCss: null,
@@ -231,6 +237,10 @@
   function makepreviewhtml() {
     let doc = document.implementation.createHTMLDocument('');
     doc.body.id = "rsspreviewBody";
+
+    if (options.darkTheme) {
+      doc.documentElement.classList.add("dark");
+    }
 
     let feedBody = doc.createElement('div');
     feedBody.id = 'feedBody';

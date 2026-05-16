@@ -3,6 +3,43 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <style>
+      body {
+        background-color: white;
+        color: black;
+        font-family: sans-serif;
+        padding: 10px;
+      }
+
+      .setting input[type="checkbox"] {
+          vertical-align: middle;
+          position: relative;
+          top: -1px; /* Sometimes needed for manual optical correction */
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #2a2a2e;
+          color: #f9f9fa;
+        }
+
+        textarea {
+          background-color: #42414d;
+          color: #f9f9fa;
+          border: 1px solid #5b5b66;
+        }
+
+        input[type="checkbox"] {
+          accent-color: #0a84ff;
+        }
+
+        input[type="text"] {
+          background-color: #42414d;
+          color: #f9f9fa;
+          border: 1px solid #5b5b66;
+        }
+      }
+    </style>
   </head>
 
   <body>
@@ -29,6 +66,9 @@
     <hr />
 
     <label class="setting browser-style"><input type="checkbox" id="localeDate" class="validate" > Use locale format for dates (will use ISO format otherwise)</label>
+    <hr />
+
+    <label class="setting browser-style"><input type="checkbox" id="darkTheme" class="validate"> Enable dark theme</label>
     <hr />
 
     <label class="setting browser-style"><input type="checkbox" id="enableCss" class="validate" > Enable custom CSS:</label><br />

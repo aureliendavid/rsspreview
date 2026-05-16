@@ -172,6 +172,52 @@ img {
 
 
 
+/* Dark theme overrides */
+html.dark {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+  scrollbar-color: #444 #1a1a1a;
+}
+
+html.dark body {
+  background-color: #1a1a1a;
+}
+
+html.dark h1 {
+  border-bottom: 2px solid #444;
+}
+
+html.dark h2 {
+  color: #aaa;
+}
+
+html.dark #feedBody {
+  background-color: #242424;
+  border: 1px solid #444;
+  color: #ddd;
+}
+
+html.dark .link,
+html.dark a {
+  color: #66b3ff;
+}
+
+html.dark .link:hover:active,
+html.dark a:hover:active {
+  color: #ff6666;
+}
+
+html.dark .enclosures {
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+}
+
+html.dark #feedLastUpdate,
+html.dark .lastUpdated {
+  color: #999;
+}
+
+
 
 
 /**

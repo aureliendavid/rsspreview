@@ -2,3 +2,4 @@ web-ext-artifacts
 todo.txt
 node_modules/
 package-lock.json
+.amo-upload-uuid
