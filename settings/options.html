@@ -11,7 +11,7 @@
         padding: 10px;
       }
 
-      .setting input[type="checkbox"] {
+      .setting input[type="checkbox"], .setting input[type="radio"] {
           vertical-align: middle;
           position: relative;
           top: -1px; /* Sometimes needed for manual optical correction */
@@ -68,7 +68,21 @@
     <label class="setting browser-style"><input type="checkbox" id="localeDate" class="validate" > Use locale format for dates (will use ISO format otherwise)</label>
     <hr />
 
-    <label class="setting browser-style"><input type="checkbox" id="darkTheme" class="validate"> Enable dark theme</label>
+    <div>
+      <span class="setting browser-style"> Theme preference: </span>
+
+      <label class="setting browser-style">
+        &nbsp;<input type="radio" name="theme" value="light" class="validate" checked>light
+      </label>
+
+      <label class="setting browser-style">
+        &nbsp;<input type="radio" name="theme" value="dark" class="validate">dark
+      </label>
+
+      <label class="setting browser-style">
+        &nbsp;<input type="radio" name="theme" value="auto" class="validate">auto (system)
+      </label>
+    </div>
     <hr />
 
     <label class="setting browser-style"><input type="checkbox" id="enableCss" class="validate" > Enable custom CSS:</label><br />

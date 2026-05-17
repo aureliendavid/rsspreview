@@ -19,7 +19,7 @@ function saveOptions(e) {
     orangeIcon: document.querySelector("#orangeIcon").checked,
     enableCss: document.querySelector("#enableCss").checked,
     bypassCSP: document.querySelector("#bypassCSP").checked,
-    darkTheme: document.querySelector("#darkTheme").checked,
+    theme: document.querySelector('input[name="theme"]:checked').value,
     customCss: document.querySelector("#customCss").value,
     newTab: document.querySelector("#newTab").checked,
     localeDate: document.querySelector("#localeDate").checked
@@ -51,7 +51,7 @@ function restoreOptions() {
     document.querySelector("#fullPreview").checked = result.fullPreview;
     document.querySelector("#doAuthor").checked = result.doAuthor;
     document.querySelector("#orangeIcon").checked = result.orangeIcon;
-    document.querySelector("#darkTheme").checked = result.darkTheme;
+    document.querySelector(`input[name="theme"][value="${result.theme}"]`).checked = true;
     document.querySelector("#enableCss").checked = result.enableCss;
     document.querySelector("#bypassCSP").checked = result.bypassCSP;
     document.querySelector("#customCss").value = result.customCss;
@@ -74,7 +74,7 @@ function restoreOptions() {
     fullPreview: false,
     doAuthor: false,
     orangeIcon: android,
-    darkTheme: systemDarkDefault,
+    theme: "auto",
     enableCss: false,
     bypassCSP: false,
     customCss: null,
