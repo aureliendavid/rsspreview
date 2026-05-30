@@ -87,7 +87,14 @@
 
     <label class="setting browser-style"><input type="checkbox" id="enableCss" class="validate" > Enable custom CSS:</label><br />
     <textarea class="setting browser-style validate" id="customCss" rows="7" cols="50" style="font-family: monospace;"></textarea>
+    <br />
     <label class="setting browser-style"><input type="checkbox" id="bypassCSP" class="validate" > Bypass CSP header when needed</label><br />
+
+    <hr />
+    <label class="setting browser-style"><input type="checkbox" id="forcePolyfill" class="validate" > Use XSLT Polyfill lib even if native XSLT is present</label><br />
+
+    <hr />
+    <label class="setting browser-style"><input type="checkbox" id="debugLogs" class="validate" > Enable more error logs in the console</label><br />
 
     <script src="options.js"></script>
 

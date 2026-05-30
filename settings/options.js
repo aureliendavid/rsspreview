@@ -22,7 +22,9 @@ function saveOptions(e) {
     theme: document.querySelector('input[name="theme"]:checked').value,
     customCss: document.querySelector("#customCss").value,
     newTab: document.querySelector("#newTab").checked,
-    localeDate: document.querySelector("#localeDate").checked
+    localeDate: document.querySelector("#localeDate").checked,
+    forcePolyfill: document.querySelector("#forcePolyfill").checked,
+    debugLogs: document.querySelector("#debugLogs").checked
   };
 
   browser.storage.sync.set(options);
@@ -57,6 +59,8 @@ function restoreOptions() {
     document.querySelector("#customCss").value = result.customCss;
     document.querySelector("#newTab").checked = result.newTab;
     document.querySelector("#localeDate").checked = result.localeDate;
+    document.querySelector("#forcePolyfill").checked = result.forcePolyfill;
+    document.querySelector("#debugLogs").checked = result.debugLogs;
 
     localStorage.setItem('options', JSON.stringify(result));
   }
@@ -79,7 +83,9 @@ function restoreOptions() {
     bypassCSP: false,
     customCss: null,
     newTab: !android,
-    localeDate: true
+    localeDate: true,
+    forcePolyfill: false,
+    debugLogs: false
   });
   getting.then(onResult, onError);
 
