@@ -5,7 +5,7 @@
    * it will do nothing next time.
    */
   if (window.hasRun) {
-    console.log('already run');
+    console.log('rsspreview is already running');
     return;
   }
 
@@ -29,7 +29,9 @@
     bypassCSP: false,
     customCss: null,
     newTab: true,
-    localeDate: true
+    localeDate: true,
+    forcePolyfill: false,
+    debugLogs: false
   };
 
   let xml_parser = new XMLSerializer();
@@ -55,12 +57,25 @@
   }
 
   function applyxsl(xmlin, xsl, node, doc = document) {
+
+    if (!window.XSLTProcessor) {
+      console.error("XSLTProcessor unavaible, not running");
+      return;
+    }
+    if (options.debugLogs) {
+      let isNativeXSLT = window.XSLTProcessor.toString().includes('native code');
+      console.log("Using", isNativeXSLT ? "native" : "polyfill", "XSLT library");
+    }
+
     let xsltProcessor = new XSLTProcessor();
     xsltProcessor.importStylesheet(xsl);
     xsltProcessor.setParameter(null, 'fullPreview', options.fullPreview);
     xsltProcessor.setParameter(null, 'doAuthor', options.doAuthor);
+
     let fragment = xsltProcessor.transformToFragment(xmlin, doc);
+
     node.appendChild(fragment);
+
   }
 
   function getlang() {
@@ -70,6 +85,7 @@
   function formatsubtitle() {
     try {
       let feed_desc = document.getElementById('feedSubtitleRaw');
+      if (!feed_desc) return;
 
       let html_desc = html_parser.parseFromString(
         '<h2 id="feedSubtitleText">' + feed_desc.innerText + '</h2>',
@@ -81,7 +97,8 @@
 
       feed_desc.parentNode.removeChild(feed_desc);
     } catch (e) {
-      console.error(e);
+      if (options.debugLogs)
+        console.error(e);
     }
   }
 
@@ -91,6 +108,7 @@
 
     for (let i = 0; i < tohtml.length; i++) {
 
+      let xml_desc = "";
       try {
         let html_txt = '';
         if (tohtml[i].getAttribute('desctype') == 'text/plain') {
@@ -104,15 +122,18 @@
         }
 
         let html_desc = html_parser.parseFromString(html_txt, 'text/html');
-        let xml_desc = xml_parser.serializeToString(
+        xml_desc = xml_parser.serializeToString(
           html_desc.body.firstChild
         );
 
         tohtml[i].insertAdjacentHTML('afterend', xml_desc);
         tohtml[i].setAttribute('todel', 1);
       } catch (e) {
-        console.error(e);
-        console.log(tohtml[i]);
+        if (options.debugLogs) {
+          console.error(e);
+          console.log(tohtml[i]);
+          console.log(xml_desc);
+        }
       }
 
     }
@@ -174,16 +195,17 @@
       //basically removes html content if there is some
       //only do it if there's a tag to avoid doing it when text titles cointain a '&'
       //(which can be caught but still displays an error in console, which is annoying)
-      if (et[i].innerText.indexOf('<') >= 0 || et[i].innerText.indexOf('&amp;')) {
+      if (et[i].innerText.indexOf('<') >= 0) {
 
         let tmp = document.createElement('span');
         try {
           tmp.innerHTML = et[i].innerText;
           et[i].innerText = tmp.textContent;
         } catch (e) {
-          // if not parsable, display as text
-          console.error(e);
-          console.log(et[i].innerText);
+          if (options.debugLogs) {
+            console.error(e);
+            console.log(et[i].innerText);
+          }
         }
       }
     }
@@ -289,62 +311,55 @@
   }
 
   function main(feedNode) {
+
+    let t0 = performance.now();
+
     let feed_url = window.location.href;
     let preview = makepreviewhtml();
 
-    xhrdoc(chrome.runtime.getURL('rss.xsl'), 'xml', xsl_xml => {
-      applyxsl(feedNode, xsl_xml, preview.getElementById('feedBody'), preview);
+    xhrdoc(browser.runtime.getURL('rss.xsl'), 'xml', xsl_xml => {
 
-      // replace the content with the preview document
-      document.replaceChild(
-        document.importNode(preview.documentElement, true),
-        document.documentElement
-      );
+      const polyfillUrl = browser.runtime.getURL("lib/xslt-polyfill.min.js");
 
-      let t0 = performance.now();
+      import(polyfillUrl)
+        .then(function() {
 
-      formatsubtitle();
+          applyxsl(feedNode, xsl_xml, preview.getElementById('feedBody'), preview);
 
-      formatdescriptions();
-      removeemptyenclosures();
-      formatfilenames();
-      formatfilesizes();
-      formattitles();
-      formatdates();
-      extensionimages();
-      applysettings();
+          // replace the content with the preview document
+          document.replaceChild(
+            document.importNode(preview.documentElement, true),
+            document.documentElement
+          );
 
-      let t1 = performance.now();
-      //console.log("exec in: " + (t1 - t0) + "ms");
+          formatsubtitle();
 
-      document.title = document.getElementById('feedTitleText').innerText;
+          formatdescriptions();
+          removeemptyenclosures();
+          formatfilenames();
+          formatfilesizes();
+          formattitles();
+          formatdates();
+          extensionimages();
+          applysettings();
+
+          let titleNode = document.getElementById('feedTitleText');
+          if (titleNode)
+            document.title = titleNode.innerText;
+
+          if (options.debugLogs) {
+            let t1 = performance.now();
+            console.log("exec in: " + (t1 - t0) + "ms");
+          }
+
+        })
+        .catch(function(err) {
+          console.error("Failed to dynamically load XSLT polyfill:", err);
+      });
+
+
     });
   }
-
-
-  function onOptions(opts) {
-    options = opts;
-
-    let feedRoot = detect();
-
-    if (feedRoot && !options.preventPreview) {
-
-      main(feedRoot);
-    }
-
-    else if (options.doDetect) {
-
-      findFeeds();
-    }
-
-  }
-
-  function onError(error) {
-    console.log(`Error on get options: ${error}`);
-  }
-
-  let getting = browser.storage.sync.get(options);
-  getting.then(onOptions, onError);
 
 
   function registerFeeds(feeds) {
@@ -353,7 +368,9 @@
       }
 
       function handleError(error) {
-        //console.log(error);
+        if (options.debugLogs) {
+          console.log("registerFeeds error: ", error);
+        }
       }
 
       browser.runtime.sendMessage(feeds).then(handleResponse, handleError);
@@ -448,5 +465,34 @@
     let finder = domainFeedFinders.get(document.domain) || defaultFindFeeds;
     finder();
   }
+
+  function onOptions(opts) {
+    options = opts;
+
+    let feedRoot = detect();
+
+    window.xsltUsePolyfillAlways = options.forcePolyfill;
+
+    if (feedRoot && !options.preventPreview) {
+
+      main(feedRoot);
+    }
+
+    else if (options.doDetect) {
+
+      findFeeds();
+    }
+
+
+
+  }
+
+  function onError(error) {
+    console.log(`Error on get options: ${error}`);
+  }
+
+  let getting = browser.storage.sync.get(options);
+  getting.then(onOptions, onError);
+
 
 })();

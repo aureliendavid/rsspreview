@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "RSSPreview",
-  "version": "3.36.1",
+  "version": "4.0",
   "author": "Aurelien David",
   "homepage_url": "https://github.com/aureliendavid/rsspreview",
 
@@ -29,7 +29,7 @@
     }
   ],
 
-  "web_accessible_resources": ["preview.css", "rss.xsl", "icons/*.png"],
+  "web_accessible_resources": ["preview.css", "rss.xsl", "icons/*.png", "lib/xslt-polyfill.min.js"],
 
 
   "options_ui": {

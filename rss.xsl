@@ -63,7 +63,7 @@
 
                 <div class="lastUpdated"><xsl:value-of select="*[local-name() = 'pubDate'] | atom:updated | atom:published[not(../atom:updated)] | atom03:updated | dc:date" /></div>
 
-                <xsl:if test="$doAuthor">
+                <xsl:if test="$doAuthor = 'true'">
                   <div class="author"><xsl:value-of select="dc:creator | *[local-name() = 'author'] | atom:*/atom:name | atom03:*/atom03:name" /></div>
                 </xsl:if>
             </h3>
@@ -73,7 +73,7 @@
             </xsl:if>
 
             <xsl:choose>
-              <xsl:when test="not($fullPreview)">
+              <xsl:when test="$fullPreview != 'true'">
                 <xsl:choose>
                   <xsl:when test="*[local-name() = 'description'] | atom:summary | atom03:summary">
                     <div class="feedRawContent" desctype="{atom:summary/@type | atom03:summary/@type }">
