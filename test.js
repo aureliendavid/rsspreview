@@ -58,6 +58,32 @@ const ATOM_FEED = `<?xml version="1.0" encoding="UTF-8"?>
   </entry>
 </feed>`;
 
+const MEDIA_RSS_FEED = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Media RSS fixture</title>
+    <item>
+      <title>Content image</title>
+      <media:content url="${BASE}/synthetic-media/content.jpg" type="image/jpeg" medium="image" width="320" height="180" />
+    </item>
+    <item>
+      <title>Image MIME without medium</title>
+      <media:content url="${BASE}/synthetic-media/type-only.png" type="image/png" />
+    </item>
+    <item>
+      <title>Non-image content</title>
+      <media:content url="${BASE}/synthetic-media/video.mp4" type="video/mp4" medium="video" />
+    </item>
+    <item>
+      <title>Thumbnail takes precedence</title>
+      <media:group>
+        <media:content url="${BASE}/synthetic-media/full.jpg" type="image/jpeg" medium="image" width="1280" height="720" />
+        <media:thumbnail url="${BASE}/synthetic-media/thumbnail.jpg" width="480" height="270" />
+      </media:group>
+    </item>
+  </channel>
+</rss>`;
+
 const SECOND_RSS_FEED = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
@@ -128,7 +154,18 @@ function createRssTestServer() {
           res.end(ATOM_FEED);
           break;
 
+        case '/feed-media.rss':
+          res.writeHead(200, { 'Content-Type': 'application/rss+xml' });
+          res.end(MEDIA_RSS_FEED);
+          break;
+
         default:
+          if (url.startsWith('/synthetic-media/')) {
+            res.writeHead(204);
+            res.end();
+            break;
+          }
+
           // Used for test bridge init/reset.
           res.writeHead(200, { 'Content-Type': 'text/html' });
           res.end(htmlPage('Test Page'));
@@ -373,6 +410,34 @@ async function main() {
       }
     } catch (e) {
       results.error('Atom feed displays with CSS', e);
+    }
+
+    try {
+      await driver.get(`${BASE}/feed-media.rss`);
+      await sleep(4000);
+
+      const mediaImages = await driver.executeScript(() => {
+        return Array.from(document.querySelectorAll('.entry')).map(entry =>
+          Array.from(entry.querySelectorAll('img.mediaThumb')).map(image => ({
+            src: image.getAttribute('src'),
+            display: image.style.display,
+          }))
+        );
+      });
+      const expected = [
+        [{ src: `${BASE}/synthetic-media/content.jpg`, display: 'none' }],
+        [{ src: `${BASE}/synthetic-media/type-only.png`, display: 'none' }],
+        [],
+        [{ src: `${BASE}/synthetic-media/thumbnail.jpg`, display: 'none' }],
+      ];
+
+      if (JSON.stringify(mediaImages) === JSON.stringify(expected)) {
+        results.pass('Media RSS image content is previewed with thumbnails preferred');
+      } else {
+        results.fail('Media RSS image content is previewed with thumbnails preferred', JSON.stringify(mediaImages));
+      }
+    } catch (e) {
+      results.error('Media RSS image content is previewed with thumbnails preferred', e);
     }
 
   } catch (e) {

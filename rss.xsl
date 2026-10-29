@@ -68,9 +68,18 @@
                 </xsl:if>
             </h3>
 
-            <xsl:if test='.//media:thumbnail/@url'>
-                <img class="mediaThumb" src="{ .//media:thumbnail/@url }" width="{ .//media:thumbnail/@width }" height="{ .//media:thumbnail/@height }" />
-            </xsl:if>
+            <xsl:variable name="mediaThumbnails" select=".//media:thumbnail[@url]" />
+            <xsl:variable name="mediaContentImages" select=".//media:content[@url][translate(@medium, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = 'image' or starts-with(translate(@type, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'image/')]" />
+            <xsl:choose>
+              <xsl:when test="$mediaThumbnails">
+                <xsl:variable name="mediaThumbnail" select="$mediaThumbnails[1]" />
+                <img class="mediaThumb" src="{$mediaThumbnail/@url}" width="{$mediaThumbnail/@width}" height="{$mediaThumbnail/@height}" />
+              </xsl:when>
+              <xsl:when test="$mediaContentImages">
+                <xsl:variable name="mediaContentImage" select="$mediaContentImages[1]" />
+                <img class="mediaThumb" src="{$mediaContentImage/@url}" width="{$mediaContentImage/@width}" height="{$mediaContentImage/@height}" />
+              </xsl:when>
+            </xsl:choose>
 
             <xsl:choose>
               <xsl:when test="$fullPreview != 'true'">
